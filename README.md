@@ -7,6 +7,27 @@ Yes, there are multiple PHP-based youtube downloaders on the Internet, but all o
 
 This script does not depend on anything other than cURL. No Javascript interpreters, no calls to shell... nothing but pure PHP.
 
+Demo
+------
+
+Just to prove its reliability and the fact that it works even with YouTube videos that encrypt their signature, visit this URL:  
+
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4  
+  
+Or stream it directly:
+
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true
+
+
+Installation
+-------
+
+Recommended way of installing this is via [Composer](http://getcomposer.org):
+
+```bash
+composer require athlon1600/youtube-downloader
+```
+
 # Usage
 
 
