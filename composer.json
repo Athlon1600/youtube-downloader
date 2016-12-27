@@ -1,0 +1,14 @@
+{
+	"name": "athlon1600/youtube-downloader",
+	"description": "PHP powered alternative for youtube-dl",
+	"keywords": ["youtube downloader", "download youtube", "download youtube videos"],
+	"license": "MIT",
+	"require": {
+		"ext-curl": "*"
+	},
+	"autoload": {
+		"files": [
+			"src/YouTubeDownloader.php"
+		]
+	}
+}
