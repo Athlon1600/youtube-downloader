@@ -132,8 +132,10 @@ class YouTubeDownloader {
 	// html code of watch?v=aaa
 	private function getInstructions($html){
 		
+		// <script src="//s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js" name="player/base"></script>
+		
 		// check what player version that video is using
-		if(preg_match('@<script\s*src="([^"]+player-en_US[^"]+)@', $html, $matches)){
+		if(preg_match('@<script\s*src="([^"]+player[^"]+js)@', $html, $matches)){
 			
 			$player_url = str_replace('//', 'http://', $matches[1]);
 			
