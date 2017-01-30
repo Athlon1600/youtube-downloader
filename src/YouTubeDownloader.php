@@ -137,7 +137,7 @@ class YouTubeDownloader {
 		// check what player version that video is using
 		if(preg_match('@<script\s*src="([^"]+player[^"]+js)@', $html, $matches)){
 			
-			$player_url = str_replace('//', 'http://', $matches[1]);
+			$player_url = str_replace('//', 'https://', $matches[1]);
 			
 			// try to find instructions list already cached from previous requests...
 			$file_path = $this->storage_dir.'/'.md5($player_url);
