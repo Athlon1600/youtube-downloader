@@ -305,12 +305,6 @@ class YouTubeDownloader {
 			$html = $this->curl("https://www.youtube.com/watch?v={$video_id}");
 		}
 		
-		// age-gate
-		if(strpos($html, 'player-age-gate-content') !== false){
-			// nothing you can do folks...
-			return false;
-		}
-		
 		$gvi = $this->curl("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D".urlencode($video_id)."&video_id={$video_id}");
 
 		// http://stackoverflow.com/questions/35608686/how-can-i-get-the-actual-video-url-of-a-youtube-live-stream
