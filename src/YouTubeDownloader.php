@@ -6,15 +6,13 @@ function sig_js_decode($player_html){
 	// what javascript function is responsible for signature decryption?
 	// var l=f.sig||Xn(f.s)
 	// a.set("signature",Xn(c));return a
-	if(preg_match('/signature",([a-zA-Z0-9$]+)\(/', $player_html, $matches)){
+	if(preg_match('/signature",([a-zA-Z0-9]+)\(/', $player_html, $matches)){
 		
-		$func_name = $matches[1];		
-		$func_name = preg_quote($func_name);
+		$func_name = $matches[1];
 		
 		// extract code block from that function
-		// single quote in case function name contains $dollar sign
 		// xm=function(a){a=a.split("");wm.zO(a,47);wm.vY(a,1);wm.z9(a,68);wm.zO(a,21);wm.z9(a,34);wm.zO(a,16);wm.z9(a,41);return a.join("")};
-		if(preg_match('/'.$func_name.'=function\([a-z]+\){(.*?)}/', $player_html, $matches)){
+		if(preg_match("/{$func_name}=function\([a-z]+\){(.*?)}/", $player_html, $matches)){
 			
 			$js_code = $matches[1];
 			
@@ -156,7 +154,7 @@ class YouTubeDownloader {
 				
 				// unserialize could fail on empty file
 				$str = file_get_contents($file_path);
-				return unserialize($str);
+				return unserialize($str);;
 				
 			} else {
 				
@@ -182,21 +180,25 @@ class YouTubeDownloader {
 			die("no url found!");
 		}
 		
-		// grab first available MP4 link
 		$url = $links[0]['url'];
 		
-		// request headers
-		$headers = array(
-			'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0'
-		);
+		$ch = curl_init();
+
+		$headers = array();
 		
 		if(isset($_SERVER['HTTP_RANGE'])){
 			$headers[] = 'Range: '.$_SERVER['HTTP_RANGE'];
 		}
 		
-		$ch = curl_init();
+		$headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0';
+		
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		
+		
+		//curl_setopt($ch, CURLOPT_BUFFERSIZE, 4096);
 		curl_setopt($ch, CURLOPT_URL, $url);
+		
+		//curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
 		
 		// we deal with this ourselves
@@ -216,7 +218,6 @@ class YouTubeDownloader {
 			if(preg_match('@HTTP\/\d\.\d\s(\d+)@', $data, $matches)){
 				$status_code = $matches[1];
 				
-				// status=ok or partial content
 				if($status_code == 200 || $status_code == 206){
 					$headers_sent = true;
 					header(rtrim($data));
@@ -237,6 +238,7 @@ class YouTubeDownloader {
 			return strlen($data);
 		});
 		
+		
 		// if response is empty - this never gets called
 		curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($curl, $data) use (&$headers_sent){
 			
@@ -249,7 +251,6 @@ class YouTubeDownloader {
 		});
 		
 		$ret = @curl_exec($ch);
-		$error = curl_error($ch);
 		curl_close($ch);
 		
 		// if we are still here by now, return status_code
@@ -305,51 +306,56 @@ class YouTubeDownloader {
 			$html = $this->curl("https://www.youtube.com/watch?v={$video_id}");
 		}
 		
-		// age-gate
-		if(strpos($html, 'player-age-gate-content') !== false){
-			// nothing you can do folks...
-			return false;
-		}
-		
+		$gvi = $this->curl("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D".urlencode($video_id)."&video_id={$video_id}");
+
 		// http://stackoverflow.com/questions/35608686/how-can-i-get-the-actual-video-url-of-a-youtube-live-stream
 		if(preg_match('@url_encoded_fmt_stream_map["\']:\s*["\']([^"\'\s]*)@', $html, $matches)){
+			$uefsm = $matches[1];
+		} elseif (preg_match('@url_encoded_fmt_stream_map=([^\&\s]+)@', $gvi, $matches_gvi)){
+			$uefsm = urldecode($matches_gvi[1]);
+		} elseif (strpos($html, 'player-age-gate-content') !== false) { // age-gate
+			// nothing you can do folks...
+			return false;
+		} else {
+			// youtube must have changed something
+			return false;
+		}
+
+		$parts = explode(",", $uefsm);
 			
-			$parts = explode(",", $matches[1]);
-			
-			foreach($parts as $p){
-				$query = str_replace('\u0026', '&', $p);
-				parse_str($query, $arr);
+		foreach($parts as $p){
+			$query = str_replace('\u0026', '&', $p);
+			parse_str($query, $arr);
+
+			$url = $arr['url'];
 				
-				$url = $arr['url'];
+			if(isset($arr['sig'])){
+				$url = $url.'&signature='.$arr['sig'];
 				
-				if(isset($arr['sig'])){
-					$url = $url.'&signature='.$arr['sig'];
+			} else if(isset($arr['signature'])){
+				$url = $url.'&signature='.$arr['signature'];
 				
-				} else if(isset($arr['signature'])){
-					$url = $url.'&signature='.$arr['signature'];
-				
-				} else if(isset($arr['s'])){
+			} else if(isset($arr['s'])){
 					
-					// this is probably a VEVO/ads video... signature must be decrypted first! We need instructions for doing that
-					if(count($instructions) == 0){
-						$instructions = (array)$this->getInstructions($html);
-					}
-					
-					$dec = $this->sig_decipher($arr['s'], $instructions);
-					$url = $url.'&signature='.$dec;
+				// this is probably a VEVO/ads video... signature must be decrypted first! We need instructions for doing that
+				if(count($instructions) == 0){
+					$instructions = (array)$this->getInstructions($html);
 				}
-				
-				// redirector.googlevideo.com
-				//$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
-				
-				$itag = $arr['itag'];
-				$format = isset($this->itag_info[$itag]) ? $this->itag_info[$itag] : 'Unknown';
-				
-				$result[$itag] = array(
-					'url' => $url,
-					'format' => $format
-				);
+					
+				$dec = $this->sig_decipher($arr['s'], $instructions);
+				$url = $url.'&signature='.$dec;
 			}
+				
+			// redirector.googlevideo.com
+			//$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
+				
+			$itag = $arr['itag'];
+			$format = isset($this->itag_info[$itag]) ? $this->itag_info[$itag] : 'Unknown';
+				
+			$result[$itag] = array(
+				'url' => $url,
+				'format' => $format
+			);
 		}
 		
 		// do we want all links or just select few?
