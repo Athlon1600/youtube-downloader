@@ -18,6 +18,10 @@ Or stream it directly:
 
 https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true
 
+Works with Age-Restricted videos too:  
+
+https://api.unblockvideos.com/youtube_downloader?id=dUiuuoCAMuw&selector=mp4&redirect=true
+
 
 Installation
 -------
