@@ -3,11 +3,20 @@
 // utils.php
 function sig_js_decode($player_html){
 	
-	// what javascript function is responsible for signature decryption?
-	// var l=f.sig||Xn(f.s)
-	// a.set("signature",Xn(c));return a
-	if(preg_match('/signature",([a-zA-Z0-9$]+)\(/', $player_html, $matches)){
-		
+/*	 Youtube Sep2018 Changes	 
+deDE: 
+		var aL={NI:function(a,b){a.splice(0,b)},jl:function(a){a.reverse()},l5:function(a,b){var c=a[0];a[0]=a[b%a.length];a[b%a.length]=c}}
+		bL=function(a){a=a.split("");aL.jl(a,58);aL.NI(a,2);aL.l5(a,35);aL.NI(a,2);aL.jl(a,45);aL.l5(a,4);aL.jl(a,46);return a.join("")};
+	->$L=function(a,b,c){b=void 0===b?"":b;c=void 0===c?"":c;var d=new g.cL(a);a.match(/https:\/\/yt.akamaized.net/)||d.set("alr","yes");c&&d.set(b,bL(c));return d};
+*/
+	
+	// Pattern -> .*;.&&..set(.,XX(.*));.*;};
+	$prefix ="/\W*.*;\w\&&\w\.set\(\w,";
+	$funcName = "([\$a-zA-Z0-9]{2})";
+	$suffix= "\(.*\).*;.*;/";
+
+	if(preg_match($prefix.$funcName.$suffix, $player_html, $matches)){
+	
 		$func_name = $matches[1];		
 		$func_name = preg_quote($func_name);
 		
@@ -60,9 +69,6 @@ function sig_js_decode($player_html){
 	return false;
 }
 
-
-
-
 // YouTube is capitalized twice because that's how youtube itself does it:
 // https://developers.google.com/youtube/v3/code_samples/php
 class YouTubeDownloader {
@@ -71,20 +77,41 @@ class YouTubeDownloader {
 	private $cookie_dir;
 	
 	private $itag_info = array(
-	
+		5 => "FLV 400x240",
+		6 => "FLV 450x240",
+		13 => "3GP Mobile",
+		17 => "3GP 144p",
 		18 => "MP4 360p",
 		22 => "MP4 720p (HD)",
+		34 => "FLV 360p",
+		35 => "FLV 480p",
+		36 => "3GP 240p",
 		37 => "MP4 1080",
 		38 => "MP4 3072p",
-		
-		// questionable MP4s
+		43 => "WebM 360p",
+		44 => "WebM 480p",
+		45 => "WebM 720p",
+		46 => "WebM 1080p",
 		59 => "MP4 480p",
 		78 => "MP4 480p",
-	
-		43 => "WebM 360p",
-		
-		17 => "3GP 144p"
+		82 => "MP4 360p 3D",
+		83 => "MP4 480p 3D",
+		84 => "MP4 720p 3D",
+		85 => "MP4 1080p 3D",
+		91 => "MP4 144p",
+		92 => "MP4 240p HLS",
+		93 => "MP4 360p HLS",
+		94 => "MP4 480p HLS",
+		95 => "MP4 720p HLS",
+		96 => "MP4 1080p HLS",
+		100 => "WebM 360p 3D",
+		101 => "WebM 480p 3D",
+		102 => "WebM 720p 3D",
+		120 => "WebM 720p 3D",
+		127 => "TS Dash Audio 96kbps",
+		128 => "TS Dash Audio 128kbps"
 	);
+	
 	
 	function __construct(){
 		$this->storage_dir = sys_get_temp_dir();
