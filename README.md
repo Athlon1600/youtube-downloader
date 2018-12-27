@@ -85,6 +85,13 @@ array(5) {
 ```
 
 
+## How does it work
+
+A more detailed explanation on how to download videos from YouTube will be written soon.
+For now, there is this:  
+
+https://github.com/Athlon1600/youtube-downloader/pull/25#issuecomment-439373506
+
 ## To-do list
 
 - Optional command that finds ALL video formats.

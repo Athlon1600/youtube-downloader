@@ -6,6 +6,9 @@
 	"require": {
 		"ext-curl": "*"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "^5.7|6.2|^7.0"
+	},
 	"autoload": {
 		"files": [
 			"src/YouTubeDownloader.php"
