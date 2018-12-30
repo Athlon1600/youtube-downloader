@@ -409,6 +409,7 @@ class YouTubeDownloader
 
         $video_html = $this->curl("https://www.youtube.com/watch?v={$video_id}");
 
+        $result = array();
         $url_map = $this->parseStreamMap($video_html, $video_id);
 
         foreach ($url_map as $arr) {
