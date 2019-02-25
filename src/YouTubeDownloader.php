@@ -226,7 +226,7 @@ class YouTubeDownloader
         $func_name = $this->getSigDecodeFunctionName($player_html);
 
         // PHP instructions
-        $instructions = $this->getSigDecodeInstructions($player_html, $func_name);
+        $instructions = (array)$this->getSigDecodeInstructions($player_html, $func_name);
 
         foreach ($instructions as $opt) {
 
