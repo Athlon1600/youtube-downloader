@@ -11,23 +11,33 @@ https://github.com/rg3/youtube-dl
 
 Yes, there are multiple PHP-based youtube downloaders on the Internet, but all of them haven't been updated in years or they depend on youtube-dl.
 
-This script does not depend on anything other than cURL. No Javascript interpreters, no calls to shell... nothing but pure PHP.
+This script does not depend on anything other than cURL. 
+No Javascript interpreters, no calls to shell... nothing but pure PHP with no heavy dependencies either.
+
+![](https://i.imgur.com/lW3OxvG.png?1)
+
+That's all there is to it!
+
+## :new: Update -- December 30, 2019!
+
+Finally figured it out. 
+As of right now, this is probably the only working 
+PHP-based youtube downloader out there.
 
 Demo
 ------
 
 Just to prove its reliability and the fact that it works even with YouTube videos that encrypt their signature, visit this URL:  
 
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4  
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&code=secret  
   
 Or stream it directly:
 
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true&code=secret
 
-Works with Age-Restricted videos too:  
+~~Works with Age-Restricted videos too~~  
 
-https://api.unblockvideos.com/youtube_downloader?id=4Ai63AkrZDk&selector=mp4&redirect=true
-
+- TODO
 
 Installation
 -------
@@ -42,6 +52,8 @@ composer require athlon1600/youtube-downloader
 
 
 ```php
+use YouTube\YouTubeDownloader;
+
 $yt = new YouTubeDownloader();
 
 $links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=QxsmWxxouIM");
@@ -97,6 +109,12 @@ A more detailed explanation on how to download videos from YouTube will be writt
 For now, there is this:  
 
 https://github.com/Athlon1600/youtube-downloader/pull/25#issuecomment-439373506
+
+## Other Links
+
+https://github.com/TeamNewPipe/NewPipeExtractor/blob/d83787a5ca308c4ca4e86e63a8b63c5e7c4708d6/extractor/src/main/java/org/schabi/newpipe/extractor/services/youtube/extractors/YoutubeStreamExtractor.java
+
+https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py
 
 ## To-do list
 
