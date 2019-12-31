@@ -122,8 +122,20 @@ class YouTubeDownloader
             $return = array();
 
             foreach ($formats_combined as $item) {
-                $cipher = $item['cipher'];
+                $cipher = isset($item['cipher']) ? $item['cipher'] : '';
                 $itag = $item['itag'];
+
+                // some videos do not need to be decrypted!
+                if (isset($item['url'])) {
+
+                    $return[] = array(
+                        'url' => $item['url'],
+                        'itag' => $itag,
+                        'format' => $parser->parseItagInfo($itag)
+                    );
+
+                    continue;
+                }
 
                 parse_str($cipher, $result);
 
@@ -145,6 +157,8 @@ class YouTubeDownloader
             return $return;
 
         } catch (\Exception $exception) {
+            // do nothing
+        } catch (\Throwable $throwable) {
             // do nothing
         }
 

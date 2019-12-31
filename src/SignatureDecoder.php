@@ -4,6 +4,14 @@ namespace YouTube;
 
 class SignatureDecoder
 {
+    /**
+     * Throws both \Exception and \Error
+     * https://www.php.net/manual/en/language.errors.php7.php
+     *
+     * @param $signature
+     * @param $js_code
+     * @return string
+     */
     public function decode($signature, $js_code)
     {
         $func_name = $this->parseFunctionName($js_code);
