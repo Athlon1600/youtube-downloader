@@ -4,6 +4,15 @@ namespace YouTube;
 
 class Browser
 {
+    protected $storage_dir;
+    protected $cookie_dir;
+
+    public function __construct()
+    {
+        $this->storage_dir = sys_get_temp_dir();
+        $this->cookie_dir = sys_get_temp_dir();
+    }
+
     public function get($url)
     {
         $ch = curl_init($url);
@@ -27,7 +36,24 @@ class Browser
 
     public function getCached($url)
     {
-        // TODO
+        $cache_path = sprintf('%s/%s', $this->storage_dir, $this->getCacheKey($url));
+
+        if (file_exists($cache_path)) {
+
+            // unserialize could fail on empty file
+            $str = file_get_contents($cache_path);
+            return unserialize($str);
+        }
+
+        $response = $this->get($url);
+
+        // must not fail
+        if ($response) {
+            file_put_contents($cache_path, serialize($response));
+            return $response;
+        }
+
+        return null;
     }
 
     public function head($url)
@@ -42,5 +68,10 @@ class Browser
         curl_close($ch);
 
         return http_parse_headers($result);
+    }
+
+    protected function getCacheKey($url)
+    {
+        return md5($url);
     }
 }
