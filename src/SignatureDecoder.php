@@ -4,12 +4,12 @@ namespace YouTube;
 
 class SignatureDecoder
 {
-    public function decode($signature, $player_html)
+    public function decode($signature, $js_code)
     {
-        $func_name = $this->getSigDecodeFunctionName($player_html);
+        $func_name = $this->parseFunctionName($js_code);
 
         // PHP instructions
-        $instructions = (array)$this->getSigDecodeInstructions($player_html, $func_name);
+        $instructions = (array)$this->parseFunctionCode($func_name, $js_code);
 
         foreach ($instructions as $opt) {
 
@@ -32,11 +32,9 @@ class SignatureDecoder
         return trim($signature);
     }
 
-    protected function getSigDecodeFunctionName($player_html)
+    public function parseFunctionName($js_code)
     {
-        $pattern = '@yt\.akamaized\.net\/\)\s*\|\|\s*.*?\s*c\s*&&\s*d\.set\([^,]+\s*,\s*\([^\)]+\)\(([a-zA-Z0-9$]+)@is';
-
-        if (preg_match($pattern, $player_html, $matches)) {
+        if (preg_match('@,\s*encodeURIComponent\((\w{2})@is', $js_code, $matches)) {
             $func_name = $matches[1];
             $func_name = preg_quote($func_name);
 
@@ -47,12 +45,12 @@ class SignatureDecoder
     }
 
     // convert JS code for signature decipher to PHP code
-    protected function getSigDecodeInstructions($player_html, $func_name)
+    public function parseFunctionCode($func_name, $player_htmlz)
     {
         // extract code block from that function
         // single quote in case function name contains $dollar sign
         // xm=function(a){a=a.split("");wm.zO(a,47);wm.vY(a,1);wm.z9(a,68);wm.zO(a,21);wm.z9(a,34);wm.zO(a,16);wm.z9(a,41);return a.join("")};
-        if (preg_match('/' . $func_name . '=function\([a-z]+\){(.*?)}/', $player_html, $matches)) {
+        if (preg_match('/' . $func_name . '=function\([a-z]+\){(.*?)}/', $player_htmlz, $matches)) {
 
             $js_code = $matches[1];
 
@@ -67,7 +65,7 @@ class SignatureDecoder
                 $func_list = $matches[2];
 
                 // extract javascript code for each one of those statement functions
-                preg_match_all('/(' . implode('|', $func_list) . '):function(.*?)\}/m', $player_html, $matches2, PREG_SET_ORDER);
+                preg_match_all('/(' . implode('|', $func_list) . '):function(.*?)\}/m', $player_htmlz, $matches2, PREG_SET_ORDER);
 
                 $functions = array();
 

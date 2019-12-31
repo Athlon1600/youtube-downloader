@@ -6,74 +6,17 @@ namespace YouTube;
 // https://developers.google.com/youtube/v3/code_samples/php
 class YouTubeDownloader
 {
-    private $storage_dir;
-    private $cookie_dir;
-
     private $client;
-
-    private $itag_info = array(
-        5 => "FLV 400x240",
-        6 => "FLV 450x240",
-        13 => "3GP Mobile",
-        17 => "3GP 144p",
-        18 => "MP4 360p",
-        22 => "MP4 720p (HD)",
-        34 => "FLV 360p",
-        35 => "FLV 480p",
-        36 => "3GP 240p",
-        37 => "MP4 1080",
-        38 => "MP4 3072p",
-        43 => "WebM 360p",
-        44 => "WebM 480p",
-        45 => "WebM 720p",
-        46 => "WebM 1080p",
-        59 => "MP4 480p",
-        78 => "MP4 480p",
-        82 => "MP4 360p 3D",
-        83 => "MP4 480p 3D",
-        84 => "MP4 720p 3D",
-        85 => "MP4 1080p 3D",
-        91 => "MP4 144p",
-        92 => "MP4 240p HLS",
-        93 => "MP4 360p HLS",
-        94 => "MP4 480p HLS",
-        95 => "MP4 720p HLS",
-        96 => "MP4 1080p HLS",
-        100 => "WebM 360p 3D",
-        101 => "WebM 480p 3D",
-        102 => "WebM 720p 3D",
-        120 => "WebM 720p 3D",
-        127 => "TS Dash Audio 96kbps",
-        128 => "TS Dash Audio 128kbps"
-    );
 
     function __construct()
     {
-        $this->storage_dir = sys_get_temp_dir();
-        $this->cookie_dir = sys_get_temp_dir();
-
         $this->client = new Browser();
-    }
-
-    function setStorageDir($dir)
-    {
-        $this->storage_dir = $dir;
-    }
-
-    // if URL: download it
-    private function toHtml($html)
-    {
-
     }
 
     // accepts either raw HTML or url
     // <script src="//s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js" name="player/base"></script>
     public function getPlayerUrl($video_html)
     {
-        if (strpos($video_html, 'http') === 0) {
-            $video_html = $this->client->get($video_html);
-        }
-
         $player_url = null;
 
         // check what player version that video is using
@@ -92,23 +35,9 @@ class YouTubeDownloader
         return $player_url;
     }
 
-    // Do not redownload player.js everytime - cache it
-    public function getPlayerHtml($video_html)
+    public function getPlayerCode($player_url)
     {
-        $player_url = $this->getPlayerUrl($video_html);
-
-        $cache_path = sprintf('%s/%s', $this->storage_dir, md5($player_url));
-
-        if (file_exists($cache_path)) {
-            $contents = file_get_contents($cache_path);
-            //return unserialize($contents);
-        }
-
-        $contents = $this->client->get($player_url);
-
-        // cache it too!
-        file_put_contents($cache_path, serialize($contents));
-
+        $contents = $this->client->getCached($player_url);
         return $contents;
     }
 
@@ -142,82 +71,86 @@ class YouTubeDownloader
         return $result;
     }
 
-    // some of the data may need signature decoding
-    public function parseStreamMap($video_html, $video_id)
+    public function getVideoInfo($url)
     {
-        $stream_map = array();
-        $result = array();
-
-        // http://stackoverflow.com/questions/35608686/how-can-i-get-the-actual-video-url-of-a-youtube-live-stream
-        if (preg_match('@url_encoded_fmt_stream_map["\']:\s*["\']([^"\'\s]*)@', $video_html, $matches)) {
-            $stream_map = $matches[1];
-        } else {
-
-            $gvi = $this->client->get("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D" . urlencode($video_id) . "&video_id={$video_id}");
-
-            if (preg_match('@url_encoded_fmt_stream_map=([^\&\s]+)@', $gvi, $matches_gvi)) {
-                $stream_map = urldecode($matches_gvi[1]);
-            }
-        }
-
-        if ($stream_map) {
-            $parts = explode(",", $stream_map);
-
-            foreach ($parts as $p) {
-                $query = str_replace('\u0026', '&', $p);
-                parse_str($query, $arr);
-
-                $result[] = $arr;
-            }
-
-            return $result;
-        }
-
-        // TODO:
-        // elseif (strpos($html, 'player-age-gate-content') !== false) { // age-gate
-        // youtube must have changed something
-        return $result;
+        // $this->client->get("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D" . urlencode($video_id) . "&video_id={$video_id}");
     }
 
-    // options | deep_links | append_redirector
-    // TODO: make it accept video_html too
-    public function getDownloadLinks($video_id, $selector = false)
+    public function getPageHtml($url)
     {
-        // you can input HTML of /watch? page directory instead of id
-        $video_id = $this->extractVideoId($video_id);
+        $video_id = $this->extractVideoId($url);
+        return $this->client->get("https://www.youtube.com/watch?v={$video_id}");
+    }
 
-        $video_html = $this->client->get("https://www.youtube.com/watch?v={$video_id}");
-        $player_html = $this->getPlayerHtml($video_html);
+    public function getPlayerResponse($page_html)
+    {
+        if (preg_match('/player_response":"(.*?)","/', $page_html, $matches)) {
+            $match = stripslashes($matches[1]);
 
-        $result = array();
-        $url_map = $this->parseStreamMap($video_html, $video_id);
+            $ret = json_decode($match, true);
+            return $ret;
+        }
 
-        foreach ($url_map as $arr) {
-            $url = $arr['url'];
+        return null;
+    }
 
-            if (isset($arr['sig'])) {
-                $url = $url . '&signature=' . $arr['sig'];
+    // redirector.googlevideo.com
+    //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
+    public function parsePlayerResponse($player_response, $js_code)
+    {
+        $parser = new Parser();
 
-            } elseif (isset($arr['signature'])) {
-                $url = $url . '&signature=' . $arr['signature'];
+        try {
+            $formats = $player_response['streamingData']['formats'];
+            $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
 
-            } elseif (isset($arr['s'])) {
+            $formats_combined = array_merge($formats, $adaptiveFormats);
 
-                $signature = (new SignatureDecoder())->decode($arr['s'], $player_html);
-                $url = $url . '&signature=' . $signature;
+            // final response
+            $return = array();
+
+            foreach ($formats_combined as $item) {
+                $cipher = $item['cipher'];
+                $itag = $item['itag'];
+
+                parse_str($cipher, $result);
+
+                $url = $result['url'];
+                $sp = $result['sp']; // typically 'sig'
+                $signature = $result['s'];
+
+                $decoded_signature = (new SignatureDecoder())->decode($signature, $js_code);
+
+                // redirector.googlevideo.com
+                //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
+                $return[] = array(
+                    'url' => $url . '&' . $sp . '=' . $decoded_signature,
+                    'itag' => $itag,
+                    'format' => $parser->parseItagInfo($itag)
+                );
             }
 
-            // redirector.googlevideo.com
-            //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
+            return $return;
 
-            $itag = $arr['itag'];
-            $format = isset($this->itag_info[$itag]) ? $this->itag_info[$itag] : 'Unknown';
-
-            $result[$itag] = array(
-                'url' => $url,
-                'format' => $format
-            );
+        } catch (\Exception $exception) {
+            // do nothing
         }
+
+        return null;
+    }
+
+    public function getDownloadLinks($video_id, $selector = false)
+    {
+        $page_html = $this->getPageHtml($video_id);
+
+        // get JSON encoded parameters that appear on video pages
+        $json = $this->getPlayerResponse($page_html);
+
+        // get player.js location that holds signature function
+        $url = $this->getPlayerUrl($page_html);
+        $js = $this->getPlayerCode($url);
+
+        $result = $this->parsePlayerResponse($json, $js);
 
         // do we want all links or just select few?
         if ($selector) {
