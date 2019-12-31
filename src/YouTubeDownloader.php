@@ -52,7 +52,7 @@ class YouTubeDownloader
         $this->storage_dir = sys_get_temp_dir();
         $this->cookie_dir = sys_get_temp_dir();
 
-        $this->client = null;
+        $this->client = new Browser();
     }
 
     function setStorageDir($dir)
@@ -66,49 +66,12 @@ class YouTubeDownloader
 
     }
 
-    // what identifies each request? user agent, cookies...
-    public function curl($url)
-    {
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-
-        //curl_setopt($ch, CURLOPT_COOKIEJAR, $tmpfname);
-        //curl_setopt($ch, CURLOPT_COOKIEFILE, $tmpfname);
-
-        //curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        return $result;
-    }
-
-    // TODO: remove this as it required PECL extension
-    public static function head($url)
-    {
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-        curl_setopt($ch, CURLOPT_NOBODY, 1);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        return http_parse_headers($result);
-    }
-
     // accepts either raw HTML or url
     // <script src="//s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js" name="player/base"></script>
     public function getPlayerUrl($video_html)
     {
         if (strpos($video_html, 'http') === 0) {
-            $video_html = $this->curl($video_html);
+            $video_html = $this->client->get($video_html);
         }
 
         $player_url = null;
@@ -141,7 +104,7 @@ class YouTubeDownloader
             //return unserialize($contents);
         }
 
-        $contents = $this->curl($player_url);
+        $contents = $this->client->get($player_url);
 
         // cache it too!
         file_put_contents($cache_path, serialize($contents));
@@ -190,7 +153,7 @@ class YouTubeDownloader
             $stream_map = $matches[1];
         } else {
 
-            $gvi = $this->curl("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D" . urlencode($video_id) . "&video_id={$video_id}");
+            $gvi = $this->client->get("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D" . urlencode($video_id) . "&video_id={$video_id}");
 
             if (preg_match('@url_encoded_fmt_stream_map=([^\&\s]+)@', $gvi, $matches_gvi)) {
                 $stream_map = urldecode($matches_gvi[1]);
@@ -223,7 +186,7 @@ class YouTubeDownloader
         // you can input HTML of /watch? page directory instead of id
         $video_id = $this->extractVideoId($video_id);
 
-        $video_html = $this->curl("https://www.youtube.com/watch?v={$video_id}");
+        $video_html = $this->client->get("https://www.youtube.com/watch?v={$video_id}");
         $player_html = $this->getPlayerHtml($video_html);
 
         $result = array();
