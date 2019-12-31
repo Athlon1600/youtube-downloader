@@ -108,6 +108,14 @@ class YouTubeDownloader
             $formats = $player_response['streamingData']['formats'];
             $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
 
+            if (!is_array($formats)) {
+                $formats = array();
+            }
+
+            if (!is_array($adaptiveFormats)) {
+                $adaptiveFormats = array();
+            }
+
             $formats_combined = array_merge($formats, $adaptiveFormats);
 
             // final response
