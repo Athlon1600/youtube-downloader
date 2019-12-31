@@ -12,6 +12,14 @@
 	"autoload": {
 		"files": [
 			"src/YouTubeDownloader.php"
-		]
+		],
+		"psr-4": {
+			"YouTube\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"YouTube\\Tests\\": "tests"
+		}
 	}
 }
