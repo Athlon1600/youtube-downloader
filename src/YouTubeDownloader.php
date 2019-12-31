@@ -6,7 +6,7 @@ namespace YouTube;
 // https://developers.google.com/youtube/v3/code_samples/php
 class YouTubeDownloader
 {
-    private $client;
+    protected $client;
 
     function __construct()
     {
@@ -169,4 +169,3 @@ class YouTubeDownloader
         return $result;
     }
 }
-
