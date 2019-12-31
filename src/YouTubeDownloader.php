@@ -51,7 +51,11 @@ class YouTubeDownloader
         return false;
     }
 
-    // selector by format: mp4 360,
+    /**
+     * @param array $links
+     * @param string $selector mp4, 360, etc...
+     * @return array
+     */
     private function selectFirst($links, $selector)
     {
         $result = array();
@@ -151,6 +155,11 @@ class YouTubeDownloader
         $js = $this->getPlayerCode($url);
 
         $result = $this->parsePlayerResponse($json, $js);
+
+        // if error happens
+        if (!is_array($result)) {
+            return array();
+        }
 
         // do we want all links or just select few?
         if ($selector) {
