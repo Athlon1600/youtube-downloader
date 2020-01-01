@@ -29,11 +29,11 @@ Demo
 
 Just to prove its reliability and the fact that it works even with YouTube videos that encrypt their signature, visit this URL:  
 
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&code=secret  
-  
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4
+
 Or stream it directly:
 
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true&code=secret
+https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true
 
 ~~Works with Age-Restricted videos too~~  
 
