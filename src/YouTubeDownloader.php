@@ -8,9 +8,17 @@ class YouTubeDownloader
 {
     protected $client;
 
+    /** @var string */
+    protected $error;
+
     function __construct()
     {
         $this->client = new Browser();
+    }
+
+    public function getLastError()
+    {
+        return $this->error;
     }
 
     // accepts either raw HTML or url
@@ -167,7 +175,17 @@ class YouTubeDownloader
 
     public function getDownloadLinks($video_id, $selector = false)
     {
+        $this->error = null;
+
         $page_html = $this->getPageHtml($video_id);
+
+        if (strpos($page_html, 'We have been receiving a large volume of requests') !== false ||
+            strpos($page_html, 'systems have detected unusual traffic') !== false) {
+
+            $this->error = 'HTTP 429: Too many requests.';
+
+            return array();
+        }
 
         // get JSON encoded parameters that appear on video pages
         $json = $this->getPlayerResponse($page_html);
