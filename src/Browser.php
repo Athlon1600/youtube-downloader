@@ -34,7 +34,10 @@ class Browser
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookie_file);
 
         //curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 
         $result = curl_exec($ch);
