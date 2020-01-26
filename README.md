@@ -18,9 +18,9 @@ No Javascript interpreters, no calls to shell... nothing but pure PHP with no he
 
 That's all there is to it!
 
-## :new: Update -- December 30, 2019!
+## :new: Update -- January 26, 2020!
 
-Finally figured it out. 
+Updated to work with the January changes to YouTube.  
 As of right now, this is probably the only working 
 PHP-based youtube downloader out there.
 
