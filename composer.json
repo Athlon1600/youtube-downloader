@@ -19,5 +19,8 @@
 		"psr-4": {
 			"YouTube\\Tests\\": "tests"
 		}
+	},
+	"scripts": {
+		"test": "phpunit"
 	}
 }
