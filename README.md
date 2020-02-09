@@ -9,7 +9,10 @@
 This project was inspired by a very popular youtube-dl python package:  
 https://github.com/rg3/youtube-dl
 
-Yes, there are multiple PHP-based youtube downloaders on the Internet, but all of them haven't been updated in years or they depend on youtube-dl.
+Yes, there are multiple other PHP-based youtube downloaders on the Internet, 
+but most of them haven't been updated in years, or they depend on youtube-dl itself.  
+
+Pure PHP-based youtube downloaders that work, and are **kept-up-to date** just do not exist.
 
 This script does not depend on anything other than cURL. 
 No Javascript interpreters, no calls to shell... nothing but pure PHP with no heavy dependencies either.
@@ -18,14 +21,25 @@ No Javascript interpreters, no calls to shell... nothing but pure PHP with no he
 
 That's all there is to it!
 
-## :new: Update -- January 26, 2020!
 
-Updated to work with the January changes to YouTube.  
-As of right now, this is probably the only working 
-PHP-based youtube downloader out there.
+## :new: Latest Update -- February 9, 2020
 
-Demo
+- Stream YouTube videos directly from your server:
+
+```php
+$youtube = new \YouTube\YouTubeStreamer();
+$youtube->stream('https://r4---sn-n4v7knll.googlevideo.com/videoplayback?...');
+```
+
+See a Demo:
+- coming soon
+
+
+
+Demo [deprecated]
 ------
+
+> Too many people have abused this. I will be shutting it down soon. Spin this app on your own heroku account.
 
 Just to prove its reliability and the fact that it works even with YouTube videos that encrypt their signature, visit this URL:  
 
