@@ -31,7 +31,12 @@
 
             var url = $("#txt_url").val();
 
+            var oThis = $(this);
+            oThis.attr('disabled', true);
+
             $.get('video_info.php', {url: url}, function (data) {
+
+                oThis.attr('disabled', false);
 
                 console.log(data);
 

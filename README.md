@@ -75,6 +75,13 @@ Recommended way of installing this is via [Composer](http://getcomposer.org):
 composer require athlon1600/youtube-downloader
 ```
 
+Run locally:
+
+```bash
+php -S localhost:8000 -t vendor/athlon1600/youtube-downloader/public
+```
+
+
 # Usage
 
 
