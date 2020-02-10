@@ -31,9 +31,22 @@ $youtube = new \YouTube\YouTubeStreamer();
 $youtube->stream('https://r4---sn-n4v7knll.googlevideo.com/videoplayback?...');
 ```
 
-See a Demo:
-- coming soon
+## Demo App
 
+- https://youtube-downloader3.herokuapp.com/
+
+![](http://proxynova.s3.amazonaws.com/youtube-downloader-save-video.png)
+
+
+### Deploy your own App
+
+on Heroku:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+
+Create a FREE account first if you do not yet have one:  
+https://signup.heroku.com/
 
 
 Demo [deprecated]
