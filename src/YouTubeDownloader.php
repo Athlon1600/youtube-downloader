@@ -136,10 +136,14 @@ class YouTubeDownloader
                 // some videos do not need to be decrypted!
                 if (isset($item['url'])) {
 
+				    $size = $this->getFileSize($item['url']);
+
                     $return[] = array(
                         'url' => $item['url'],
                         'itag' => $itag,
-                        'format' => $parser->parseItagInfo($itag)
+                        'format' => $parser->parseItagInfo($itag),
+                        'size' => $size
+
                     );
 
                     continue;
@@ -208,4 +212,28 @@ class YouTubeDownloader
 
         return $result;
     }
+    
+	public function getFileSize($url)
+	{
+		 $ch = curl_init($url);
+
+		 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		 curl_setopt($ch, CURLOPT_HEADER, TRUE);
+		 curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+
+		 $data = curl_exec($ch);
+		 $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+
+		 curl_close($ch);
+		 return $this->convertToReadableSize($size);
+
+	}
+
+	public function convertToReadableSize($size)
+	{
+	  $base = log($size) / log(1024);
+	  $suffix = array("", "KB", "MB", "GB", "TB");
+	  $f_base = floor($base);
+	  return round(pow(1024, $base - floor($base)), 1) . ' '.$suffix[$f_base];
+	}
 }
