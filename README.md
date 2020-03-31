@@ -48,24 +48,6 @@ on Heroku:
 Create a FREE account first if you do not yet have one:  
 https://signup.heroku.com/
 
-
-Demo [deprecated]
-------
-
-> Too many people have abused this. I will be shutting it down soon. Spin this app on your own heroku account.
-
-Just to prove its reliability and the fact that it works even with YouTube videos that encrypt their signature, visit this URL:  
-
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4
-
-Or stream it directly:
-
-https://api.unblockvideos.com/youtube_downloader?id=e-ORhEE9VVg&selector=mp4&redirect=true
-
-~~Works with Age-Restricted videos too~~  
-
-- TODO
-
 Installation
 -------
 
@@ -90,52 +72,48 @@ use YouTube\YouTubeDownloader;
 
 $yt = new YouTubeDownloader();
 
-$links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=QxsmWxxouIM");
+$links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=LJzCYSdrHMI");
 
 var_dump($links);
 ```
 
-Result:  
+Typical output:
+
 ```php
-array(5) {
-  [22]=>
-  array(2) {
+array(13) {
+  [0]=>
+  array(3) {
     ["url"]=>
-    string(670) "https://r3---sn-vgqs7ney.googlevideo.com/videoplayback?ratebypass=yes&requiressl=yes&initcwndbps=1142500&nh=IgpwZjAxLm9yZDM1Kg42Ni4yMDguMjI4LjIwMQ&key=yt6&mime=video%2Fmp4&mn=sn-vgqs7ney&mm=31&id=o-APybfQxBq_Uf0UwtAWdBuT2hoXzus5lvuXnd9VSmh5Dl&ip=67.184.200.25&gcr=us&sparams=dur%2Cei%2Cgcr%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&mt=1482861742&ms=au&pl=16&itag=22&ei=Fq1iWM-PIsLyugLMor-gBA&mv=m&source=youtube&upn=pDkyvSW9InM&dur=265.357&ipbits=0&expire=1482883446&lmt=1478829845344913&signature=A27686411B20AD4EB61A29BC695509DB4D003681.9AE606614F809319EEE0B230BFCEFD09F5C39E12"
+    string(820) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=18&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fmp4&gir=yes&clen=15386550&ratebypass=yes&dur=215.550&lmt=1540977373739457&mt=1585697193&fvip=4&c=WEB&txp=5431432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIgapMHgteEaTdLUhadRXmpm0F6hiexTsXwCwVNQK2XV4MCIQC012rLqDUxmlqdKwcd9JIi_vQ9_jczWBTf7wZw4KzYNg=="
+    ["itag"]=>
+    int(18)
     ["format"]=>
-    string(13) "MP4 720p (HD)"
+    string(23) "mp4, video, 360p, audio"
   }
-  [43]=>
-  array(2) {
+  [1]=>
+  array(3) {
     ["url"]=>
-    string(704) "https://r3---sn-vgqs7ney.googlevideo.com/videoplayback?ratebypass=yes&requiressl=yes&initcwndbps=1142500&nh=IgpwZjAxLm9yZDM1Kg42Ni4yMDguMjI4LjIwMQ&key=yt6&gir=yes&mime=video%2Fwebm&mn=sn-vgqs7ney&mm=31&id=o-APybfQxBq_Uf0UwtAWdBuT2hoXzus5lvuXnd9VSmh5Dl&clen=23934795&ip=67.184.200.25&gcr=us&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&mt=1482861742&ms=au&pl=16&itag=43&ei=Fq1iWM-PIsLyugLMor-gBA&mv=m&source=youtube&upn=pDkyvSW9InM&dur=0.000&ipbits=0&expire=1482883446&lmt=1466552369088504&signature=4A9B43F989EF4DB937C56AC889BF9AFAA1363439.87B358B93A19E3C292BE823A2E7FD505E527956C"
+    string(862) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=135&aitags=133%2C134%2C135%2C160%2C242%2C243%2C244%2C278&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fmp4&gir=yes&clen=16811068&dur=215.480&lmt=1540977822655178&mt=1585697193&fvip=4&keepalive=yes&c=WEB&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIgYmZ3IRKrmcEpLAoKMkL-534wd4F34esToX0DJFsv5-4CIQDfEevpFMn57t3-Tidx5VHraC9QS24y-fUgWqWzNvoxag=="
+    ["itag"]=>
+    int(135)
     ["format"]=>
-    string(9) "WebM 360p"
+    string(16) "mp4, video, 480p"
   }
-  [18]=>
-  array(2) {
+  [2]=>
+  array(3) {
     ["url"]=>
-    string(705) "https://r3---sn-vgqs7ney.googlevideo.com/videoplayback?ratebypass=yes&requiressl=yes&initcwndbps=1142500&nh=IgpwZjAxLm9yZDM1Kg42Ni4yMDguMjI4LjIwMQ&key=yt6&gir=yes&mime=video%2Fmp4&mn=sn-vgqs7ney&mm=31&id=o-APybfQxBq_Uf0UwtAWdBuT2hoXzus5lvuXnd9VSmh5Dl&clen=18431345&ip=67.184.200.25&gcr=us&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cupn%2Cexpire&mt=1482861742&ms=au&pl=16&itag=18&ei=Fq1iWM-PIsLyugLMor-gBA&mv=m&source=youtube&upn=pDkyvSW9InM&dur=265.357&ipbits=0&expire=1482883446&lmt=1478827692757115&signature=0C2203FABCEBC01A0B154C109EA7A03EBB778A17.7FFE657A41B06ABB4729E03253A92E1AA5562D3E"
+    string(863) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=244&aitags=133%2C134%2C135%2C160%2C242%2C243%2C244%2C278&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fwebm&gir=yes&clen=12496451&dur=215.480&lmt=1540977711684149&mt=1585697193&fvip=4&keepalive=yes&c=WEB&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIhAOLXVJMMW8zKJm1Moug94ak57hijQ3HAKnIu6y8mZtyiAiBs9kY_wHtiAd3rg4891X7aBJiqzDyEoxaVCodWeJt9hQ=="
+    ["itag"]=>
+    int(244)
     ["format"]=>
-    string(8) "MP4 360p"
-  }
-  [36]=>
-  array(2) {
-    ["url"]=>
-    string(677) "https://r3---sn-vgqs7ney.googlevideo.com/videoplayback?requiressl=yes&initcwndbps=1142500&nh=IgpwZjAxLm9yZDM1Kg42Ni4yMDguMjI4LjIwMQ&key=yt6&gir=yes&mime=video%2F3gpp&mn=sn-vgqs7ney&mm=31&id=o-APybfQxBq_Uf0UwtAWdBuT2hoXzus5lvuXnd9VSmh5Dl&clen=7400500&ip=67.184.200.25&gcr=us&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&mt=1482861742&ms=au&pl=16&itag=36&ei=Fq1iWM-PIsLyugLMor-gBA&mv=m&source=youtube&upn=pDkyvSW9InM&dur=265.404&ipbits=0&expire=1482883446&lmt=1466551971126275&signature=121F4D6F18C10D31951E2C2A857E52351BCC1A8C.B6EFCCB6734190053A0F3980FC67D3E508EA30FF"
-    ["format"]=>
-    string(7) "Unknown"
-  }
-  [17]=>
-  array(2) {
-    ["url"]=>
-    string(677) "https://r3---sn-vgqs7ney.googlevideo.com/videoplayback?requiressl=yes&initcwndbps=1142500&nh=IgpwZjAxLm9yZDM1Kg42Ni4yMDguMjI4LjIwMQ&key=yt6&gir=yes&mime=video%2F3gpp&mn=sn-vgqs7ney&mm=31&id=o-APybfQxBq_Uf0UwtAWdBuT2hoXzus5lvuXnd9VSmh5Dl&clen=2661359&ip=67.184.200.25&gcr=us&sparams=clen%2Cdur%2Cei%2Cgcr%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Crequiressl%2Csource%2Cupn%2Cexpire&mt=1482861742&ms=au&pl=16&itag=17&ei=Fq1iWM-PIsLyugLMor-gBA&mv=m&source=youtube&upn=pDkyvSW9InM&dur=265.404&ipbits=0&expire=1482883446&lmt=1466551946325771&signature=9C0017C6EE3EC754BCB73E4546483807143CC495.A738E50D2B2C9073E9369A8828BA780B6BA453F7"
-    ["format"]=>
-    string(8) "3GP 144p"
-  }
+    string(17) "webm, video, 480p"
+  },
+  ...
 }
 ```
 
+If you are looking for links that include both video and audio in a single file, 
+then filter down that list to look for links that contain both `video` and `audio` inside its `format` property.
 
 ## How does it work
 
