@@ -22,16 +22,9 @@ No Javascript interpreters, no calls to shell... nothing but pure PHP with no he
 That's all there is to it!
 
 
-## :new: Latest Update -- February 9, 2020
-
-- Stream YouTube videos directly from your server:
-
-```php
-$youtube = new \YouTube\YouTubeStreamer();
-$youtube->stream('https://r4---sn-n4v7knll.googlevideo.com/videoplayback?...');
-```
-
 ## Demo App
+
+This may not work at all times, because YouTube puts a short ban on the server if it receives too many requests from it.
 
 - https://youtube-downloader3.herokuapp.com/
 
@@ -114,6 +107,16 @@ array(13) {
 
 If you are looking for links that include both video and audio in a single file, 
 then filter down that list to look for links that contain both `video` and `audio` inside its `format` property.
+
+## Other Features
+
+- Stream YouTube videos directly from your server:
+
+```php
+$youtube = new \YouTube\YouTubeStreamer();
+$youtube->stream('https://r4---sn-n4v7knll.googlevideo.com/videoplayback?...');
+```
+
 
 ## How does it work
 
