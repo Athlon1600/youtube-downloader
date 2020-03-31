@@ -11,5 +11,10 @@ if (!$url) {
 $youtube = new \YouTube\YouTubeDownloader();
 $links = $youtube->getDownloadLinks($url);
 
+$error = $youtube->getLastError();
+
 header('Content-Type: application/json');
-echo json_encode($links, JSON_PRETTY_PRINT);
+echo json_encode([
+    'links' => $links,
+    'error' => $error
+], JSON_PRETTY_PRINT);

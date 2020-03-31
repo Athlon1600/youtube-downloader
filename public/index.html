@@ -38,14 +38,22 @@
 
                 oThis.attr('disabled', false);
 
-                console.log(data);
+                var links = data['links'];
+                var error = data['error'];
+
+                if (error) {
+                    alert('Error: ' + error);
+                    return;
+                }
 
                 // first link with video
-                var first = data.find(function (link) {
+                var first = links.find(function (link) {
                     return link['format'].indexOf('video') !== -1;
                 });
 
-                console.log(first);
+                if (!first) {
+                    alert('No video found!');
+                }
 
                 var stream_url = 'stream.php?url=' + encodeURIComponent(first['url']);
 
