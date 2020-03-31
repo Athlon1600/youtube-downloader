@@ -4,41 +4,59 @@ namespace YouTube;
 
 class Parser
 {
-    private $itag_info = array(
-        5 => "FLV 400x240",
-        6 => "FLV 450x240",
-        13 => "3GP Mobile",
-        17 => "3GP 144p",
-        18 => "MP4 360p",
-        22 => "MP4 720p (HD)",
-        34 => "FLV 360p",
-        35 => "FLV 480p",
-        36 => "3GP 240p",
-        37 => "MP4 1080",
-        38 => "MP4 3072p",
-        43 => "WebM 360p",
-        44 => "WebM 480p",
-        45 => "WebM 720p",
-        46 => "WebM 1080p",
-        59 => "MP4 480p",
-        78 => "MP4 480p",
-        82 => "MP4 360p 3D",
-        83 => "MP4 480p 3D",
-        84 => "MP4 720p 3D",
-        85 => "MP4 1080p 3D",
-        91 => "MP4 144p",
-        92 => "MP4 240p HLS",
-        93 => "MP4 360p HLS",
-        94 => "MP4 480p HLS",
-        95 => "MP4 720p HLS",
-        96 => "MP4 1080p HLS",
-        100 => "WebM 360p 3D",
-        101 => "WebM 480p 3D",
-        102 => "WebM 720p 3D",
-        120 => "WebM 720p 3D",
-        127 => "TS Dash Audio 96kbps",
-        128 => "TS Dash Audio 128kbps"
-    );
+    public function downloadFormats()
+    {
+        $data = file_get_contents("https://raw.githubusercontent.com/ytdl-org/youtube-dl/master/youtube_dl/extractor/youtube.py");
+
+        // https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py#L429
+        if (preg_match('/_formats = ({(.*?)})\s*_/s', $data, $matches)) {
+
+            $json = $matches[1];
+
+            // only "double" quotes are valid in JSON
+            $json = str_replace("'", "\"", $json);
+
+            // remove comments
+            $json = preg_replace('/\s*#(.*)/', '', $json);
+
+            // remove comma from last JSON item
+            $json = preg_replace('/,\s*}/', '}', $json);
+
+            return json_decode($json, true);
+        }
+
+        return array();
+    }
+
+    public function transformFormats($formats)
+    {
+        $results = [];
+
+        foreach ($formats as $itag => $format) {
+
+            $temp = [];
+
+            if (!empty($format['ext'])) {
+                $temp[] = $format['ext'];
+            }
+
+            if (!empty($format['vcodec'])) {
+                $temp[] = 'video';
+            }
+
+            if (!empty($format['height'])) {
+                $temp[] = $format['height'] . 'p';
+            }
+
+            if (!empty($format['acodec']) && $format['acodec'] !== 'none') {
+                $temp[] = 'audio';
+            }
+
+            $results[$itag] = implode(', ', $temp);
+        }
+
+        return $results;
+    }
 
     public function parseItagInfo($itag)
     {
@@ -47,54 +65,54 @@ class Parser
         }
 
         return 'Unknown';
-        // return isset($this->itag_info[$itag]) ? $this->itag_info[$itag] : 'Unknown';
     }
 
+    // itag info does not change frequently, that is why we cache it here as a plain static array
     private $itag_detailed = array(
-        5 => 'flv, 240p, video/audio',
-        6 => 'flv, 270p, video/audio',
-        13 => '3gp, video/audio',
-        17 => '3gp, 144p, video/audio',
-        18 => 'mp4, 360p, video/audio',
-        22 => 'mp4, 720p, video/audio',
-        34 => 'flv, 360p, video/audio',
-        35 => 'flv, 480p, video/audio',
-        36 => '3gp, video/audio',
-        37 => 'mp4, 1080p, video/audio',
-        38 => 'mp4, 3072p, video/audio',
-        43 => 'webm, 360p, video/audio',
-        44 => 'webm, 480p, video/audio',
-        45 => 'webm, 720p, video/audio',
-        46 => 'webm, 1080p, video/audio',
-        59 => 'mp4, 480p, video/audio',
-        78 => 'mp4, 480p, video/audio',
-        82 => 'mp4, 360p, video/audio',
-        83 => 'mp4, 480p, video/audio',
-        84 => 'mp4, 720p, video/audio',
-        85 => 'mp4, 1080p, video/audio',
-        100 => 'webm, 360p, video/audio',
-        101 => 'webm, 480p, video/audio',
-        102 => 'webm, 720p, video/audio',
-        91 => 'mp4, 144p, video/audio',
-        92 => 'mp4, 240p, video/audio',
-        93 => 'mp4, 360p, video/audio',
-        94 => 'mp4, 480p, video/audio',
-        95 => 'mp4, 720p, video/audio',
-        96 => 'mp4, 1080p, video/audio',
-        132 => 'mp4, 240p, video/audio',
-        151 => 'mp4, 72p, video/audio',
-        133 => 'mp4, 240p, video',
-        134 => 'mp4, 360p, video',
-        135 => 'mp4, 480p, video',
-        136 => 'mp4, 720p, video',
-        137 => 'mp4, 1080p, video',
+        5 => 'flv, video, 240p, audio',
+        6 => 'flv, video, 270p, audio',
+        13 => '3gp, video, audio',
+        17 => '3gp, video, 144p, audio',
+        18 => 'mp4, video, 360p, audio',
+        22 => 'mp4, video, 720p, audio',
+        34 => 'flv, video, 360p, audio',
+        35 => 'flv, video, 480p, audio',
+        36 => '3gp, video, audio',
+        37 => 'mp4, video, 1080p, audio',
+        38 => 'mp4, video, 3072p, audio',
+        43 => 'webm, video, 360p, audio',
+        44 => 'webm, video, 480p, audio',
+        45 => 'webm, video, 720p, audio',
+        46 => 'webm, video, 1080p, audio',
+        59 => 'mp4, video, 480p, audio',
+        78 => 'mp4, video, 480p, audio',
+        82 => 'mp4, video, 360p, audio',
+        83 => 'mp4, video, 480p, audio',
+        84 => 'mp4, video, 720p, audio',
+        85 => 'mp4, video, 1080p, audio',
+        100 => 'webm, video, 360p, audio',
+        101 => 'webm, video, 480p, audio',
+        102 => 'webm, video, 720p, audio',
+        91 => 'mp4, video, 144p, audio',
+        92 => 'mp4, video, 240p, audio',
+        93 => 'mp4, video, 360p, audio',
+        94 => 'mp4, video, 480p, audio',
+        95 => 'mp4, video, 720p, audio',
+        96 => 'mp4, video, 1080p, audio',
+        132 => 'mp4, video, 240p, audio',
+        151 => 'mp4, video, 72p, audio',
+        133 => 'mp4, video, 240p',
+        134 => 'mp4, video, 360p',
+        135 => 'mp4, video, 480p',
+        136 => 'mp4, video, 720p',
+        137 => 'mp4, video, 1080p',
         138 => 'mp4, video',
-        160 => 'mp4, 144p, video',
-        212 => 'mp4, 480p, video',
-        264 => 'mp4, 1440p, video',
-        298 => 'mp4, 720p, video',
-        299 => 'mp4, 1080p, video',
-        266 => 'mp4, 2160p, video',
+        160 => 'mp4, video, 144p',
+        212 => 'mp4, video, 480p',
+        264 => 'mp4, video, 1440p',
+        298 => 'mp4, video, 720p',
+        299 => 'mp4, video, 1080p',
+        266 => 'mp4, video, 2160p',
         139 => 'm4a, audio',
         140 => 'm4a, audio',
         141 => 'm4a, audio',
@@ -102,31 +120,35 @@ class Parser
         258 => 'm4a, audio',
         325 => 'm4a, audio',
         328 => 'm4a, audio',
-        167 => 'webm, 360p, video',
-        168 => 'webm, 480p, video',
-        169 => 'webm, 720p, video',
-        170 => 'webm, 1080p, video',
-        218 => 'webm, 480p, video',
-        219 => 'webm, 480p, video',
-        278 => 'webm, 144p, video',
-        242 => 'webm, 240p, video',
-        243 => 'webm, 360p, video',
-        244 => 'webm, 480p, video',
-        245 => 'webm, 480p, video',
-        246 => 'webm, 480p, video',
-        247 => 'webm, 720p, video',
-        248 => 'webm, 1080p, video',
-        271 => 'webm, 1440p, video',
-        272 => 'webm, 2160p, video',
-        302 => 'webm, 720p, video',
-        303 => 'webm, 1080p, video',
-        308 => 'webm, 1440p, video',
-        313 => 'webm, 2160p, video',
-        315 => 'webm, 2160p, video',
+        167 => 'webm, video, 360p',
+        168 => 'webm, video, 480p',
+        169 => 'webm, video, 720p',
+        170 => 'webm, video, 1080p',
+        218 => 'webm, video, 480p',
+        219 => 'webm, video, 480p',
+        278 => 'webm, video, 144p',
+        242 => 'webm, video, 240p',
+        243 => 'webm, video, 360p',
+        244 => 'webm, video, 480p',
+        245 => 'webm, video, 480p',
+        246 => 'webm, video, 480p',
+        247 => 'webm, video, 720p',
+        248 => 'webm, video, 1080p',
+        271 => 'webm, video, 1440p',
+        272 => 'webm, video, 2160p',
+        302 => 'webm, video, 720p',
+        303 => 'webm, video, 1080p',
+        308 => 'webm, video, 1440p',
+        313 => 'webm, video, 2160p',
+        315 => 'webm, video, 2160p',
         171 => 'webm, audio',
         172 => 'webm, audio',
         249 => 'webm, audio',
         250 => 'webm, audio',
         251 => 'webm, audio',
+        394 => 'video',
+        395 => 'video',
+        396 => 'video',
+        397 => 'video',
     );
 }
