@@ -27,7 +27,8 @@ class YoutubeStreamer
         if (preg_match('/HTTP\/[\d.]+\s*(\d+)/', $data, $matches)) {
             $status_code = $matches[1];
 
-            if ($status_code == 200 || $status_code == 206) {
+            // if Forbidden or Not Found -> those are "valid" statuses too
+            if ($status_code == 200 || $status_code == 206 || $status_code == 403 || $status_code == 404) {
                 $this->headers_sent = true;
                 $this->sendHeader(rtrim($data));
             }
