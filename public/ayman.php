@@ -1,31 +1,4 @@
-
-    
-  
-        
-
- 
-
-            
-            
-
- 
-
-                
-                
-                
-
-                
-         
-               
-      
-
-                
-                
-       
-
-                
-     
-                <?php 
+<?php 
 ob_start();
 $API_KEY = "695759710:AAG3gqTR8u288PYsFNf8c0WAvtwn_MbENsY";
 define('API_KEY',$API_KEY);
