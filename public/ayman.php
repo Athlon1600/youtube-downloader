@@ -15,9 +15,6 @@ var_dump(curl_error($ch));
 }else{return json_decode($res);}}
 
 
-if(true)
-file_put_contents('index.php','<?php echo "ayman"; ?>');
-}
 
 function objectToArrays($object)
     {
