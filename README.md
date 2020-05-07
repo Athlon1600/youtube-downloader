@@ -134,3 +134,4 @@ https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.
 ## To-do list
 
 - Optional command that finds ALL video formats.
+- Fetch additional metadata about the video without using YouTube API.
