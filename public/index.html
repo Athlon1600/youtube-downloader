@@ -36,6 +36,8 @@
 
             $.get('video_info.php', {url: url}, function (data) {
 
+                console.log(data);
+
                 oThis.attr('disabled', false);
 
                 var links = data['links'];
@@ -51,8 +53,9 @@
                     return link['format'].indexOf('video') !== -1;
                 });
 
-                if (!first) {
+                if (typeof first === 'undefined') {
                     alert('No video found!');
+                    return;
                 }
 
                 var stream_url = 'stream.php?url=' + encodeURIComponent(first['url']);
