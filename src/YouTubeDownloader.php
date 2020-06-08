@@ -111,8 +111,6 @@ class YouTubeDownloader
         return null;
     }
 
-    // redirector.googlevideo.com
-    //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
     public function parsePlayerResponse($player_response, $js_code)
     {
         $parser = new Parser();
@@ -135,7 +133,15 @@ class YouTubeDownloader
             $return = array();
 
             foreach ($formats_combined as $item) {
-                $cipher = isset($item['cipher']) ? $item['cipher'] : '';
+
+                $cipher = '';
+
+                if (isset($item['cipher'])) {
+                    $cipher = $item['cipher'];
+                } else if (isset($item['signatureCipher'])) {
+                    $cipher = $item['signatureCipher'];
+                }
+
                 $itag = $item['itag'];
 
                 // some videos do not need to be decrypted!
@@ -159,7 +165,6 @@ class YouTubeDownloader
                 $decoded_signature = (new SignatureDecoder())->decode($signature, $js_code);
 
                 // redirector.googlevideo.com
-                //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
                 $return[] = array(
                     'url' => $url . '&' . $sp . '=' . $decoded_signature,
                     'itag' => $itag,
