@@ -111,8 +111,6 @@ class YouTubeDownloader
         return null;
     }
 
-    // redirector.googlevideo.com
-    //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
     public function parsePlayerResponse($player_response, $js_code)
     {
         $parser = new Parser();
@@ -162,7 +160,6 @@ class YouTubeDownloader
                 $decoded_signature = (new SignatureDecoder())->decode($signature, $js_code);
 
                 // redirector.googlevideo.com
-                //$url = preg_replace('@(\/\/)[^\.]+(\.googlevideo\.com)@', '$1redirector$2', $url);
                 $return[] = array(
                     'url' => $url . '&' . $sp . '=' . $decoded_signature,
                     'itag' => $itag,
