@@ -9,12 +9,19 @@ class Browser
 
     protected $user_agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0';
 
+    protected $proxy;
+
     public function __construct()
     {
         $filename = 'youtube_downloader_cookies.txt';
 
         $this->storage_dir = sys_get_temp_dir();
         $this->cookie_file = join(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), $filename]);
+    }
+
+    public function setProxy($proxy_server)
+    {
+        $this->proxy = $proxy_server;
     }
 
     public function getCookieFile()
@@ -32,6 +39,10 @@ class Browser
 
         curl_setopt($ch, CURLOPT_COOKIEJAR, $this->cookie_file);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookie_file);
+
+        if ($this->proxy) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy);
+        }
 
         //curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
