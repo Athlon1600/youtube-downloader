@@ -61,7 +61,7 @@ function covtime($yt){
 }
 
 
-$bitrate = $links[json][streamingData][formats][0][contentLength];
+$bitrate = $links[0]["bite"]["contentLength"];
 
 
 
