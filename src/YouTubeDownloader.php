@@ -143,7 +143,7 @@ class YouTubeDownloader
                 if (isset($item['url'])) {
 
                     $return[] = array(
-                        'url' => $item['url'],
+                        'url' => $item,
                         'itag' => $itag,
                         'format' => $parser->parseItagInfo($itag)
                     );
