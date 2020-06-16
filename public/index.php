@@ -83,7 +83,7 @@ if ($bitrate >= 1073741824) {
 
 
 
-
+$img = "https://i.ytimg.com/vi/".$id."/hqdefault.jpg";
 
 
 header('Content-Type: application/json; charset=utf-8');
@@ -91,12 +91,13 @@ header('Content-Type: application/json; charset=utf-8');
 
 $result = [
     'url' => $links[0]["url"],
-    'sizebet' => $links[0]["sizebet"],
     'title' => $title,
+    'sizebet' => $img,
     'view_count' => $view_count,
     'duration' => covtime($VidDuration),
     'like_count' => $like_count,
     'dislike_count' => $dislike_count,
+    'sizebet' => $links[0]["sizebet"],
     'size' => $bitrate,
     'Name API' => "AymanEGY",
 ];
