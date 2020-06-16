@@ -143,8 +143,8 @@ class YouTubeDownloader
                 if (isset($item['url'])) {
 
                     $return[] = array(
-                       'url' => $item['url'][0]['url'],
-                      'sizebet' => $item['url']['0']['contentLength'],
+                       'url' => $item['url']['url'],
+                      'sizebet' => $item['url']['contentLength'],
 	);
 
                     continue;
