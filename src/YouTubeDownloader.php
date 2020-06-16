@@ -143,7 +143,8 @@ class YouTubeDownloader
                 if (isset($item['url'])) {
 
                     $return[] = array(
-                        'url' => $item,
+                       'url' => $item,
+                       'bite' => $item["0"]["contentLength"],
 	);
 
                     continue;
@@ -160,7 +161,8 @@ class YouTubeDownloader
                 // redirector.googlevideo.com
                 $return[] = array(
                     'url' => $url . '&' . $sp . '=' . $decoded_signature,
-                    'bite' => $item,
+                    'bite' => $item["0"]["contentLength"],
+                    
                 );
             }
 
