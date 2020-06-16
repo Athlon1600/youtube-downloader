@@ -144,9 +144,7 @@ class YouTubeDownloader
 
                     $return[] = array(
                         'url' => $item,
-                        'itag' => $itag,
-                        'format' => $parser->parseItagInfo($itag)
-                    );
+	);
 
                     continue;
                 }
