@@ -61,7 +61,7 @@ function covtime($yt){
 }
 
 
-$bitrate = $links[0]["bite"]["contentLength"];
+$bitrate = $links[0]["sizebet"];
 
 
 
@@ -90,7 +90,8 @@ header('Content-Type: application/json; charset=utf-8');
 
 
 $result = [
-    'url' => $links,
+    'url' => $links[0]["url"],
+    'sizebet' => $links[0]["sizebet"],
     'title' => $title,
     'view_count' => $view_count,
     'duration' => covtime($VidDuration),
