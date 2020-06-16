@@ -90,7 +90,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 
 $result = [
-    'url' => $links[0],
+    'url' => $links,
     'title' => $title,
     'view_count' => $view_count,
     'duration' => covtime($VidDuration),
