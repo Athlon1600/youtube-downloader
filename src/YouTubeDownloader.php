@@ -160,7 +160,7 @@ class YouTubeDownloader
                 // redirector.googlevideo.com
                 $return[] = array(
                     'url' => $url . '&' . $sp . '=' . $decoded_signature,
-                    'bite' => $item[contentLength],
+                    'bite' => $item[][contentLength],
                 );
             }
 
