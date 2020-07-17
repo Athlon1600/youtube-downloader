@@ -116,7 +116,15 @@ class YouTubeDownloader
         $parser = new Parser();
 
         try {
-            $formats = $player_response['streamingData']['formats'];
+            $formats = [];
+            if (isset($player_response['streamingData']))
+            {
+                if (isset($player_response['streamingData']['formats']))
+                {
+                    $formats = $player_response['streamingData']['formats'];
+                }
+            }
+            
             $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
 
             if (!is_array($formats)) {
