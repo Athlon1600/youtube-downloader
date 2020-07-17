@@ -8,7 +8,7 @@ class YouTubeDownloader
 {
     protected $client;
 
-    /** @var string */
+    /** @var string|null */
     protected $error;
 
     function __construct()
@@ -26,9 +26,14 @@ class YouTubeDownloader
         return $this->error;
     }
 
-    // accepts either raw HTML or url
-    // <script src="//s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js" name="player/base"></script>
-    public function getPlayerUrl($video_html)
+    /**
+     * Look for a player script URL. E.g:
+     * <script src="//s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js" name="player/base"></script>
+     *
+     * @param $video_html
+     * @return null|string
+     */
+    public function getPlayerScriptUrl($video_html)
     {
         $player_url = null;
 
@@ -116,16 +121,18 @@ class YouTubeDownloader
         $parser = new Parser();
 
         try {
-            $formats = [];
-            if (isset($player_response['streamingData']))
-            {
-                if (isset($player_response['streamingData']['formats']))
-                {
-                    $formats = $player_response['streamingData']['formats'];
-                }
+
+            $formats = array();
+
+            if (isset($player_response['streamingData']) && isset($player_response['streamingData']['formats'])) {
+                $formats = $player_response['streamingData']['formats'];
             }
-            
-            $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
+
+            $adaptiveFormats = array();
+
+            if (isset($player_response['streamingData']) && isset($player_response['streamingData']['adaptiveFormats'])) {
+                $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
+            }
 
             if (!is_array($formats)) {
                 $formats = array();
@@ -141,10 +148,10 @@ class YouTubeDownloader
             $return = array();
 
             foreach ($formats_combined as $item) {
-            	$cipher = '';
-                if(isset($item['cipher']) || isset($item['signatureCipher'])) {
-					$cipher = isset($item['cipher']) ? $item['cipher'] : $item['signatureCipher'];
-				}
+                $cipher = '';
+                if (isset($item['cipher']) || isset($item['signatureCipher'])) {
+                    $cipher = isset($item['cipher']) ? $item['cipher'] : $item['signatureCipher'];
+                }
                 $itag = $item['itag'];
 
                 // some videos do not need to be decrypted!
@@ -204,7 +211,7 @@ class YouTubeDownloader
         $json = $this->getPlayerResponse($page_html);
 
         // get player.js location that holds signature function
-        $url = $this->getPlayerUrl($page_html);
+        $url = $this->getPlayerScriptUrl($page_html);
         $js = $this->getPlayerCode($url);
 
         $result = $this->parsePlayerResponse($json, $js);
