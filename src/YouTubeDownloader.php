@@ -93,9 +93,40 @@ class YouTubeDownloader
         return $result;
     }
 
-    public function getVideoInfo($url)
+    // https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=JnfyjwChuNU&format=json
+    public function getVideoInfo($video_id)
     {
-        // $this->client->get("https://www.youtube.com/get_video_info?el=embedded&eurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D" . urlencode($video_id) . "&video_id={$video_id}");
+        $response = $this->client->get("https://www.youtube.com/get_video_info?" . http_build_query([
+                'video_id' => $video_id,
+                'eurl' => 'https://youtube.googleapis.com/v/' . $video_id,
+                'el' => 'embedded' // or detailpage. default: embedded, will fail if video is not embeddable
+            ]));
+
+        if ($response) {
+            $arr = array();
+
+            parse_str($response, $arr);
+
+            if (array_key_exists('player_response', $arr)) {
+                $arr['player_response'] = json_decode($arr['player_response'], true);
+            }
+
+            return $arr;
+        }
+
+        return null;
+    }
+
+    public function getPlayerConfig($video_id)
+    {
+        $video_id = $this->extractVideoId($video_id);
+        $response = $this->client->get("https://www.youtube.com/watch?v={$video_id}");
+
+        if (preg_match('/ytplayer.config\s*=\s*([^\n]+});ytplayer/i', $response, $matches)) {
+            return json_decode($matches[1], true);
+        }
+
+        return [];
     }
 
     public function getPageHtml($url)
@@ -122,25 +153,10 @@ class YouTubeDownloader
 
         try {
 
-            $formats = array();
+            $formats = Utils::arrayGet($player_response, 'streamingData.formats', []);
 
-            if (isset($player_response['streamingData']) && isset($player_response['streamingData']['formats'])) {
-                $formats = $player_response['streamingData']['formats'];
-            }
-
-            $adaptiveFormats = array();
-
-            if (isset($player_response['streamingData']) && isset($player_response['streamingData']['adaptiveFormats'])) {
-                $adaptiveFormats = $player_response['streamingData']['adaptiveFormats'];
-            }
-
-            if (!is_array($formats)) {
-                $formats = array();
-            }
-
-            if (!is_array($adaptiveFormats)) {
-                $adaptiveFormats = array();
-            }
+            // video only or audio only streams
+            $adaptiveFormats = Utils::arrayGet($player_response, 'streamingData.adaptiveFormats', []);
 
             $formats_combined = array_merge($formats, $adaptiveFormats);
 
@@ -148,10 +164,9 @@ class YouTubeDownloader
             $return = array();
 
             foreach ($formats_combined as $item) {
-                $cipher = '';
-                if (isset($item['cipher']) || isset($item['signatureCipher'])) {
-                    $cipher = isset($item['cipher']) ? $item['cipher'] : $item['signatureCipher'];
-                }
+
+                // sometimes as appear as "cipher" or "signatureCipher"
+                $cipher = Utils::arrayGet($item, 'cipher', Utils::arrayGet($item, 'signatureCipher', ''));
                 $itag = $item['itag'];
 
                 // some videos do not need to be decrypted!
@@ -200,7 +215,8 @@ class YouTubeDownloader
         $page_html = $this->getPageHtml($video_id);
 
         if (strpos($page_html, 'We have been receiving a large volume of requests') !== false ||
-            strpos($page_html, 'systems have detected unusual traffic') !== false) {
+            strpos($page_html, 'systems have detected unusual traffic') !== false ||
+            strpos($page_html, '/recaptcha/') !== false) {
 
             $this->error = 'HTTP 429: Too many requests.';
 
