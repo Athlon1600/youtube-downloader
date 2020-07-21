@@ -2,6 +2,7 @@
 
 namespace YouTube;
 
+// TODO: rename FormatParser or ITagParser
 class Parser
 {
     public function downloadFormats()
