@@ -56,27 +56,27 @@ class SignatureDecoder
     }
 
     // convert JS code for signature decipher to PHP code
-    public function parseFunctionCode($func_name, $player_htmlz)
+    public function parseFunctionCode($func_name, $player_html)
     {
         // extract code block from that function
         // single quote in case function name contains $dollar sign
         // xm=function(a){a=a.split("");wm.zO(a,47);wm.vY(a,1);wm.z9(a,68);wm.zO(a,21);wm.z9(a,34);wm.zO(a,16);wm.z9(a,41);return a.join("")};
-        if (preg_match('/' . $func_name . '=function\([a-z]+\){(.*?)}/', $player_htmlz, $matches)) {
+        if (preg_match('/' . $func_name . '=function\([a-z]+\){(.*?)}/', $player_html, $matches)) {
 
             $js_code = $matches[1];
 
             // extract all relevant statements within that block
             // wm.vY(a,1);
-            if (preg_match_all('/([a-z0-9]{2})\.([a-z0-9]{2})\([^,]+,(\d+)\)/i', $js_code, $matches) != false) {
+            if (preg_match_all('/([a-z0-9$]{2})\.([a-z0-9]{2})\([^,]+,(\d+)\)/i', $js_code, $matches) != false) {
 
-                // must be identical
+                // wm
                 $obj_list = $matches[1];
 
-                //
+                // vY
                 $func_list = $matches[2];
 
                 // extract javascript code for each one of those statement functions
-                preg_match_all('/(' . implode('|', $func_list) . '):function(.*?)\}/m', $player_htmlz, $matches2, PREG_SET_ORDER);
+                preg_match_all('/(' . implode('|', $func_list) . '):function(.*?)\}/m', $player_html, $matches2, PREG_SET_ORDER);
 
                 $functions = array();
 
