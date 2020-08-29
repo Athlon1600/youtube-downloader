@@ -6,3 +6,4 @@ Thumbs.db
 /.idea
 /.vscode
 .phpunit.result.cache
+/public/.idea
