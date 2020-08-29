@@ -244,4 +244,55 @@ class YouTubeDownloader
 
         return $result;
     }
+
+    // use this when you want to bypass 429 and you have the html
+    // while this cannot be done from javascript inside a browser because of cors,
+    // this is very helpful if you are using mobile app client or desktop app
+    public function getDownloadLinksFromHTML($page_html, $limiter = false)
+    {
+        $this->error = null;
+
+        if (strpos($page_html, 'We have been receiving a large volume of requests') !== false ||
+            strpos($page_html, 'systems have detected unusual traffic') !== false ||
+            strpos($page_html, '/recaptcha/') !== false) {
+
+            $this->error = 'HTTP 429: Too many requests.';
+
+            return array();
+        }
+
+        // get JSON encoded parameters that appear on video pages
+        $json = $this->getPlayerResponse($page_html);
+
+        // get player.js location that holds signature function
+        $url = $this->getPlayerScriptUrl($page_html);
+        $js = $this->getPlayerCode($url);
+
+        $result = $this->parsePlayerResponse($json, $js);
+
+        // if error happens
+        if (!is_array($result)) {
+            return array();
+        }
+
+        //if true
+        //limits the links to only 1: m4a audio file, 2:ready to watch videos (have audio and video already)
+        if ($limiter) {
+            return $this->limiter($result);
+        }
+
+        return $result;
+    }
+
+    //limits the links to only 1: m4a audio file, 2:ready to watch videos (have audio and video already)
+    private function limiter($links)
+    {
+        foreach ($links as $l) {
+            if ((stripos($l['format'], 'm4a, audio') !== false) || ((stripos($l['format'], 'audio') !== false)&&(stripos($l['format'], 'video') !== false)) ) {
+                    $result[] = $l;
+            }
+        }
+
+        return $result;
+    }
 }
