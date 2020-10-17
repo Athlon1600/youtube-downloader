@@ -226,6 +226,11 @@ class YouTubeDownloader
         // get JSON encoded parameters that appear on video pages
         $json = $this->getPlayerResponse($page_html);
 
+        if (empty($json)) {
+            $json = $this->getVideoInfo($this->extractVideoId($video_id));
+            $json = Utils::arrayGet($json, 'player_response');
+        }
+
         // get player.js location that holds signature function
         $url = $this->getPlayerScriptUrl($page_html);
         $js = $this->getPlayerCode($url);
