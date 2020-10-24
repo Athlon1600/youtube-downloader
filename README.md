@@ -7,7 +7,7 @@
 # youtube-downloader
 
 This project was inspired by a very popular youtube-dl python package:  
-https://github.com/rg3/youtube-dl
+https://github.com/rg3/youtube-dl ([:warning: **which has been very recently removed from github**](https://news.ycombinator.com/item?id=24872911))
 
 Yes, there are multiple other PHP-based youtube downloaders on the Internet, 
 but most of them haven't been updated in years, or they depend on youtube-dl itself.  
