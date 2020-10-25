@@ -21,6 +21,12 @@ No Javascript interpreters, no calls to shell... nothing but pure PHP with no he
 
 That's all there is to it!
 
+## Legal Disclaimer
+
+This program is for personal use only. 
+Downloading copyrighted material without permission is against [YouTube's terms of services](https://www.youtube.com/static?template=terms). 
+By using this program, you are solely responsible for any copyright violations. 
+We are not responsible for people who attempt to use this program in any way that breaks YouTube's terms of services.
 
 ## Demo App
 
@@ -65,7 +71,7 @@ use YouTube\YouTubeDownloader;
 
 $yt = new YouTubeDownloader();
 
-$links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=LJzCYSdrHMI");
+$links = $yt->getDownloadLinks("https://www.youtube.com/watch?v=aqz-KE-bpKQ");
 
 var_dump($links);
 ```
@@ -73,11 +79,14 @@ var_dump($links);
 Typical output:
 
 ```php
-array(13) {
+array(34) {
   [0]=>
   array(3) {
     ["url"]=>
-    string(820) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=18&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fmp4&gir=yes&clen=15386550&ratebypass=yes&dur=215.550&lmt=1540977373739457&mt=1585697193&fvip=4&c=WEB&txp=5431432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIgapMHgteEaTdLUhadRXmpm0F6hiexTsXwCwVNQK2XV4MCIQC012rLqDUxmlqdKwcd9JIi_vQ9_jczWBTf7wZw4KzYNg=="
+    string(818) "https://r2---sn-vgqsrnll.googlevideo.com/videoplayback?expire=1603662577&ei=kZ6VX4bVKsX2igTRw7bYDA&ip=73.44.159.175&id=o-AAp5zheuntq2b_3xaazjawoVuUu81dOj4UMFCwvobO6S&itag=18&source=youtube&requiressl=yes&mh=aP&mm=31
+%2C26&mn=sn-vgqsrnll%2Csn-p5qlsndd&ms=au%2Conr&mv=m&mvi=2&pl=15&initcwndbps=1850000&vprv=1&mime=video%2Fmp4&gir=yes&clen=47526444&ratebypass=yes&dur=634.624&lmt=1544610273905877&mt=1603640800&fvip=2&c=WEB&txp=5531432&sparams=expire%
+2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRAIgaXRmqTcfpJyamC35s18BJagdAX2qbzdOxENTvpvJf94CICZpv5_A6lzAIEynLJSP_a2gNj1YuXGDpVawA5Tr1avo&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv
+%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIhALWRQA0bvSWj-PQoydPqIWp6_5tFDBEmG98sC_MU7lSkAiBupuCcN4GBLPUs-_efbHiuorh_1VIRqW-yu5qATnXyGQ%3D%3D"
     ["itag"]=>
     int(18)
     ["format"]=>
@@ -86,21 +95,28 @@ array(13) {
   [1]=>
   array(3) {
     ["url"]=>
-    string(862) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=135&aitags=133%2C134%2C135%2C160%2C242%2C243%2C244%2C278&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fmp4&gir=yes&clen=16811068&dur=215.480&lmt=1540977822655178&mt=1585697193&fvip=4&keepalive=yes&c=WEB&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIgYmZ3IRKrmcEpLAoKMkL-534wd4F34esToX0DJFsv5-4CIQDfEevpFMn57t3-Tidx5VHraC9QS24y-fUgWqWzNvoxag=="
+    string(783) "https://r2---sn-vgqsrnll.googlevideo.com/videoplayback?expire=1603662577&ei=kZ6VX4bVKsX2igTRw7bYDA&ip=73.44.159.175&id=o-AAp5zheuntq2b_3xaazjawoVuUu81dOj4UMFCwvobO6S&itag=22&source=youtube&requiressl=yes&mh=aP&mm=31
+%2C26&mn=sn-vgqsrnll%2Csn-p5qlsndd&ms=au%2Conr&mv=m&mvi=2&pl=15&initcwndbps=1850000&vprv=1&mime=video%2Fmp4&ratebypass=yes&dur=634.624&lmt=1544610886483826&mt=1603640800&fvip=2&c=WEB&txp=5532432&sparams=expire%2Cei%2Cip%2Cid%2Citag%
+2Csource%2Crequiressl%2Cvprv%2Cmime%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRAIgSq2NECUHbKyWFOpqecNWJuyHWtv2zyTM-dmaoTeSxAwCIAwhJWN7ttYJCfJgkS91BsgzRpCg_c82ZJzOlS6PNdX3&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C
+_xAwRQIhALWRQA0bvSWj-PQoydPqIWp6_5tFDBEmG98sC_MU7lSkAiBupuCcN4GBLPUs-_efbHiuorh_1VIRqW-yu5qATnXyGQ%3D%3D"
     ["itag"]=>
-    int(135)
+    int(22)
     ["format"]=>
-    string(16) "mp4, video, 480p"
+    string(23) "mp4, video, 720p, audio"
   }
   [2]=>
   array(3) {
     ["url"]=>
-    string(863) "https://r4---sn-vgqsrn7s.googlevideo.com/videoplayback?expire=1585718912&ei=INKDXr7sA5PdwQGk5L_wBA&ip=73.44.159.175&id=o-APOJXNOviU0h2w_YwyR88MKLSLJ1Bx77faGZYYK0LJMt&itag=244&aitags=133%2C134%2C135%2C160%2C242%2C243%2C244%2C278&source=youtube&requiressl=yes&mh=hA&mm=31%2C29&mn=sn-vgqsrn7s%2Csn-vgqskne6&ms=au%2Crdu&mv=m&mvi=3&pl=15&initcwndbps=1702500&vprv=1&mime=video%2Fwebm&gir=yes&clen=12496451&dur=215.480&lmt=1540977711684149&mt=1585697193&fvip=4&keepalive=yes&c=WEB&txp=5432432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=ABSNjpQwRgIhAMo7U4XgSR09Ztya4aqGq07jdb62Zbk1z6yUtuzimRKoAiEAofZdslUJXvV4apnRzFCtpSx_Ki0qZs41BsctbtyUvo0%3D&sig=ADKhkGMwRQIhAOLXVJMMW8zKJm1Moug94ak57hijQ3HAKnIu6y8mZtyiAiBs9kY_wHtiAd3rg4891X7aBJiqzDyEoxaVCodWeJt9hQ=="
+    string(977) "https://r2---sn-vgqsrnll.googlevideo.com/videoplayback?expire=1603662577&ei=kZ6VX4bVKsX2igTRw7bYDA&ip=73.44.159.175&id=o-AAp5zheuntq2b_3xaazjawoVuUu81dOj4UMFCwvobO6S&itag=313&aitags=133%2C134%2C135%2C136%2C137%2C160
+%2C242%2C243%2C244%2C247%2C248%2C271%2C278%2C298%2C299%2C302%2C303%2C308%2C313%2C315%2C394%2C395%2C396%2C397%2C398%2C399&source=youtube&requiressl=yes&mh=aP&mm=31%2C26&mn=sn-vgqsrnll%2Csn-p5qlsndd&ms=au%2Conr&mv=m&mvi=2&pl=15&initcw
+ndbps=1850000&vprv=1&mime=video%2Fwebm&gir=yes&clen=1031056722&dur=634.566&lmt=1544610999847472&mt=1603640800&fvip=2&keepalive=yes&c=WEB&txp=5532432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2C
+clen%2Cdur%2Clmt&sig=AOq0QJ8wRgIhAOdypA3IhD7p8dI3blHQ5n9KG1ClwU6ZPwwlK4CWYn7XAiEAgnPJSrG2efjxMNrZazEgk2yb2k_gO1cerel30CJRV9w%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIhALWRQA0bvSWj-PQoydPqIWp6_5tFDB
+EmG98sC_MU7lSkAiBupuCcN4GBLPUs-_efbHiuorh_1VIRqW-yu5qATnXyGQ%3D%3D"
     ["itag"]=>
-    int(244)
+    int(313)
     ["format"]=>
-    string(17) "webm, video, 480p"
-  },
+    string(18) "webm, video, 2160p"
+  }
   ...
 }
 ```

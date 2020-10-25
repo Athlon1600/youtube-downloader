@@ -8,8 +8,7 @@ use YouTube\YouTubeDownloader;
 
 class YouTubeTest extends TestCase
 {
-    const SWIFT = 'https://www.youtube.com/watch?v=e-ORhEE9VVg';
-    const PEELE = 'https://www.youtube.com/watch?v=OTUIxtoHxNQ';
+    const BUNNY = 'https://www.youtube.com/watch?v=aqz-KE-bpKQ';
 
     public function test_browser_cookies()
     {
@@ -28,7 +27,7 @@ class YouTubeTest extends TestCase
     {
         $downloader = new YouTubeDownloader();
 
-        $ret = $downloader->getDownloadLinks(self::SWIFT);
+        $ret = $downloader->getDownloadLinks(self::BUNNY);
 
         $this->assertTrue(is_array($ret));
         $this->assertGreaterThan(0, count($ret));
