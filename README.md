@@ -7,7 +7,7 @@
 # youtube-downloader
 
 This project was inspired by a very popular youtube-dl python package:  
-https://github.com/rg3/youtube-dl ([:warning: **which has been very recently removed from github**](https://news.ycombinator.com/item?id=24872911))
+https://github.com/rg3/youtube-dl ([**which has been very recently removed from github**](https://news.ycombinator.com/item?id=24872911))
 
 Yes, there are multiple other PHP-based youtube downloaders on the Internet, 
 but most of them haven't been updated in years, or they depend on youtube-dl itself.  
@@ -21,7 +21,7 @@ No Javascript interpreters, no calls to shell... nothing but pure PHP with no he
 
 That's all there is to it!
 
-## Legal Disclaimer
+## :warning: Legal Disclaimer
 
 This program is for personal use only. 
 Downloading copyrighted material without permission is against [YouTube's terms of services](https://www.youtube.com/static?template=terms). 
@@ -34,7 +34,7 @@ This may not work at all times, because YouTube puts a short ban on the server i
 
 - https://youtube-downloader3.herokuapp.com/
 
-![](http://proxynova.s3.amazonaws.com/youtube-downloader-save-video.png)
+![](http://proxynova.s3.us-east-1.amazonaws.com/youtube-downloader-save-video.png)
 
 
 ### Deploy your own App
