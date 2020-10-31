@@ -7,7 +7,7 @@ class Parser
 {
     public function downloadFormats()
     {
-        $data = file_get_contents("https://raw.githubusercontent.com/ytdl-org/youtube-dl/master/youtube_dl/extractor/youtube.py");
+        $data = file_get_contents("https://raw.githubusercontent.com/blackjack4494/yt-dlc/master/youtube_dlc/extractor/youtube.py");
 
         // https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py#L429
         if (preg_match('/_formats = ({(.*?)})\s*_/s', $data, $matches)) {
