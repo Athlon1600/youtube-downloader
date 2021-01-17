@@ -32,7 +32,7 @@ We are not responsible for people who attempt to use this program in any way tha
 
 This may not work at all times, because YouTube puts a short ban on the server if it receives too many requests from it.
 
-- https://youtube-downloader3.herokuapp.com/
+- https://youtube-downloader-jan16.herokuapp.com/
 
 ![](http://proxynova.s3.us-east-1.amazonaws.com/youtube-downloader-save-video.png)
 
