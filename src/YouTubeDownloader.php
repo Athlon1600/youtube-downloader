@@ -137,8 +137,8 @@ class YouTubeDownloader
 
     public function getPlayerResponse($page_html)
     {
-        if (preg_match('/player_response":"(.*?)\"}};/', $page_html, $matches)) {
-            $match = stripslashes($matches[1]);
+        if (preg_match('/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/', $page_html, $matches)) {
+            $match = $matches[1];
 
             $ret = json_decode($match, true);
             return $ret;
