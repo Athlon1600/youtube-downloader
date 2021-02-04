@@ -4,9 +4,11 @@ namespace YouTube;
 
 class Utils
 {
-    public static function extractVideoId($str)
+    public static function extractVideoId($videoUrl)
     {
-        // TODO
+        preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $videoUrl, $id);
+        $this->video_id = $id[1];
+        return $this->video_id;
     }
 
     public static function arrayGet($array, $key, $default = null)
