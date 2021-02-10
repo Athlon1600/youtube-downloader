@@ -25,7 +25,7 @@ class Browser extends BrowserClient
         return $this;
     }
 
-    public function getJson($url)
+    private function getJson($url)
     {
         $response = $this->get($url);
         $response->body = json_decode($response->body, true);
@@ -59,7 +59,7 @@ class Browser extends BrowserClient
         return md5($url);
     }
 
-    public function postJson($url, $json)
+    private function postJson($url, $json)
     {
         return $this->request('POST', $url, $json, [
             'Content-Type' => 'application/json'
