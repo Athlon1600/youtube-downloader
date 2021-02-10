@@ -2,7 +2,7 @@
 
 namespace YouTube\Resources;
 
-use YouTube\Utils;
+use YouTube\Utils\Utils;
 
 class GetVideoInfo extends HttpResponse
 {

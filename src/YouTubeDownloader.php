@@ -144,7 +144,11 @@ class YouTubeDownloader
         // get JSON encoded parameters that appear on video pages
         $player_response = $page->getPlayerResponse();
 
-        // TODO: what if no playerResponse is found on page?
+        // it may ask you to "Sign in to confirm your age"
+        // bypass that by querying /get_video_info
+        if (!$page->hasPlayableVideo()) {
+            $player_response = $this->getVideoInfo($video_id)->getPlayerResponse();
+        }
 
         // get player.js location that holds signature function
         $player_js = $page->getCachedPlayerContents();

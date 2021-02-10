@@ -15,7 +15,7 @@ class WatchVideoPage extends HttpResponse
             strpos($this->getResponseBody(), '/recaptcha/') !== false;
     }
 
-    private function hasPlayableVideo()
+    public function hasPlayableVideo()
     {
         $playerResponse = $this->getPlayerResponse();
         $playabilityStatus = Utils::arrayGet($playerResponse, 'playabilityStatus.status');
