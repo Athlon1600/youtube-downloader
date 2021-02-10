@@ -8,6 +8,7 @@ use YouTube\YouTubeDownloader;
 
 class YouTubeTest extends TestCase
 {
+    // We assume that this video will never get taken down
     const BUNNY = 'https://www.youtube.com/watch?v=aqz-KE-bpKQ';
 
     public function test_browser_cookies()
@@ -20,7 +21,7 @@ class YouTubeTest extends TestCase
         // list cookies
         $list = $browser->get('https://httpbin.org/cookies');
 
-        $this->assertContains('random_value', $list);
+        $this->assertContains('random_value', $list->body);
     }
 
     public function test_get_download_links()
@@ -29,7 +30,6 @@ class YouTubeTest extends TestCase
 
         $ret = $downloader->getDownloadLinks(self::BUNNY);
 
-        $this->assertTrue(is_array($ret));
-        $this->assertGreaterThan(0, count($ret));
+        $this->assertGreaterThan(0, count($ret->getAllLinks()));
     }
 }

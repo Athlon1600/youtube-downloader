@@ -3,7 +3,7 @@
 namespace YouTube\Tests;
 
 use PHPUnit\Framework\TestCase;
-use YouTube\Utils;
+use YouTube\Utils\Utils;
 
 class ArrayTest extends TestCase
 {
