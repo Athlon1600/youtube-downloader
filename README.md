@@ -14,10 +14,9 @@ but most of them haven't been updated in years, or they depend on youtube-dl its
 
 Pure PHP-based youtube downloaders that work, and are **kept-up-to date** just do not exist.
 
-This script does not depend on anything other than cURL. 
-No Javascript interpreters, no calls to shell... nothing but pure PHP with no heavy dependencies either.
+This script uses no Javascript interpreters, no calls to shell... nothing but pure PHP with no heavy dependencies either.
 
-![](https://i.imgur.com/lW3OxvG.png?1)
+![](https://i.imgur.com/39LIE0r.png)
 
 That's all there is to it!
 
