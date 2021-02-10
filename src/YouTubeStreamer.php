@@ -2,7 +2,7 @@
 
 namespace YouTube;
 
-class YoutubeStreamer
+class YouTubeStreamer
 {
     // 4096
     protected $buffer_size = 256 * 1024;

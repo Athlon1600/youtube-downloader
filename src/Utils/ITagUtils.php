@@ -1,11 +1,10 @@
 <?php
 
-namespace YouTube;
+namespace YouTube\Utils;
 
-// TODO: rename FormatParser or ITagParser
-class Parser
+class ITagUtils
 {
-    public function downloadFormats()
+    public static function downloadFormats()
     {
         $data = file_get_contents("https://raw.githubusercontent.com/ytdl-org/youtube-dl/master/youtube_dl/extractor/youtube.py");
 
@@ -29,7 +28,7 @@ class Parser
         return array();
     }
 
-    public function transformFormats($formats)
+    public static function transformFormats($formats)
     {
         $results = [];
 
@@ -59,17 +58,17 @@ class Parser
         return $results;
     }
 
-    public function parseItagInfo($itag)
+    public static function parseItagInfo($itag)
     {
-        if (isset($this->itag_detailed[$itag])) {
-            return $this->itag_detailed[$itag];
+        if (isset(static::$itag_detailed[$itag])) {
+            return static::$itag_detailed[$itag];
         }
 
         return 'Unknown';
     }
 
     // itag info does not change frequently, that is why we cache it here as a plain static array
-    private $itag_detailed = array(
+    private static $itag_detailed = array(
         5 => 'flv, video, 240p, audio',
         6 => 'flv, video, 270p, audio',
         13 => '3gp, video, audio',
