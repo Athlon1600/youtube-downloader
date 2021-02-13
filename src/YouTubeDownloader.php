@@ -4,6 +4,7 @@ namespace YouTube;
 
 use YouTube\Data\StreamFormat;
 use YouTube\Exception\TooManyRequestsException;
+use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Resources\GetVideoInfo;
 use YouTube\Resources\VideoPlayerJs;
@@ -145,9 +146,13 @@ class YouTubeDownloader
         $player_response = $page->getPlayerResponse();
 
         // it may ask you to "Sign in to confirm your age"
-        // bypass that by querying /get_video_info
+        // we can bypass that by querying /get_video_info
         if (!$page->hasPlayableVideo()) {
             $player_response = $this->getVideoInfo($video_id)->getPlayerResponse();
+        }
+
+        if (empty($player_response)) {
+            throw new VideoPlayerNotFoundException();
         }
 
         // get player.js location that holds signature function
