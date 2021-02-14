@@ -3,20 +3,18 @@
 namespace YouTube;
 
 use Curl\BrowserClient;
+use YouTube\Utils\Utils;
 
 class Browser extends BrowserClient
 {
-    protected $storage_dir;
-
-    public function __construct()
+    public function setUserAgent($agent)
     {
-        parent::__construct();
+        $this->headers['User-Agent'] = $agent;
+    }
 
-        $cookie_file = join(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), "youtube_downloader_cookies.txt"]);
-        $this->setCookieFile($cookie_file);
-
-        // use this for cache
-        $this->storage_dir = sys_get_temp_dir();
+    public function getUserAgent()
+    {
+        return Utils::arrayGet($this->headers, 'User-Agent');
     }
 
     public function followRedirects($enabled)
@@ -34,7 +32,7 @@ class Browser extends BrowserClient
 
     public function cachedGet($url)
     {
-        $cache_path = sprintf('%s/%s', $this->storage_dir, $this->getCacheKey($url));
+        $cache_path = sprintf('%s/%s', static::getStorageDirectory(), $this->getCacheKey($url));
 
         if (file_exists($cache_path)) {
 
