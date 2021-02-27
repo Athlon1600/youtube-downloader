@@ -2,7 +2,7 @@
 
 namespace YouTube\Exception;
 
-use YouTube\Resources\WatchVideoPage;
+use YouTube\Responses\WatchVideoPage;
 
 class TooManyRequestsException extends YouTubeException
 {

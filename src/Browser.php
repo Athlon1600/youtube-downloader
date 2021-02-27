@@ -23,13 +23,6 @@ class Browser extends BrowserClient
         return $this;
     }
 
-    private function getJson($url)
-    {
-        $response = $this->get($url);
-        $response->body = json_decode($response->body, true);
-        return $response;
-    }
-
     public function cachedGet($url)
     {
         $cache_path = sprintf('%s/%s', static::getStorageDirectory(), $this->getCacheKey($url));
@@ -44,23 +37,15 @@ class Browser extends BrowserClient
         $response = $this->get($url);
 
         // cache only if successful
-        if ($response->body) {
+        if (empty($response->error)) {
             file_put_contents($cache_path, serialize($response));
-            return $response;
         }
 
-        return null;
+        return $response;
     }
 
     protected function getCacheKey($url)
     {
-        return md5($url);
-    }
-
-    private function postJson($url, $json)
-    {
-        return $this->request('POST', $url, $json, [
-            'Content-Type' => 'application/json'
-        ]);
+        return md5($url) . '_v3';
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace YouTube\Resources;
+namespace YouTube\Responses;
 
-use YouTube\Browser;
 use YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
@@ -31,33 +30,12 @@ class WatchVideoPage extends HttpResponse
      */
     public function getPlayerScriptUrl()
     {
-        $player_url = null;
-
         // check what player version that video is using
         if (preg_match('@<script\s*src="([^"]+player[^"]+js)@', $this->getResponseBody(), $matches)) {
-            $player_url = $matches[1];
-
-            // relative protocol?
-            if (strpos($player_url, '//') === 0) {
-                $player_url = 'http://' . substr($player_url, 2);
-            } elseif (strpos($player_url, '/') === 0) {
-                // relative path?
-                $player_url = 'http://www.youtube.com' . $player_url;
-            }
+            return Utils::relativeToAbsoluteUrl($matches[1], 'https://www.youtube.com');
         }
 
-        return $player_url;
-    }
-
-    // TODO: this does not belong here
-    public function getCachedPlayerContents()
-    {
-        $url = $this->getPlayerScriptUrl();
-
-        $browser = new Browser();
-        $response = $browser->cachedGet($url);
-
-        return new VideoPlayerJs($response);
+        return null;
     }
 
     public function getPlayerResponse()
@@ -71,6 +49,6 @@ class WatchVideoPage extends HttpResponse
             return json_decode($match, true);
         }
 
-        return null;
+        return array();
     }
 }

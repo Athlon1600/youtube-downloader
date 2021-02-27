@@ -48,4 +48,20 @@ class Utils
         parse_str($string, $result);
         return $result;
     }
+
+    public static function relativeToAbsoluteUrl($url, $domain)
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        $scheme = $scheme ? $scheme : 'http';
+
+        // relative protocol?
+        if (strpos($url, '//') === 0) {
+            return $scheme . '://' . substr($url, 2);
+        } elseif (strpos($url, '/') === 0) {
+            // relative path?
+            return $domain . $url;
+        }
+
+        return $url;
+    }
 }

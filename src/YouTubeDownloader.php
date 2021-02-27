@@ -2,13 +2,14 @@
 
 namespace YouTube;
 
-use YouTube\Data\StreamFormat;
+use YouTube\Models\StreamFormat;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
-use YouTube\Resources\GetVideoInfo;
-use YouTube\Resources\VideoPlayerJs;
-use YouTube\Resources\WatchVideoPage;
+use YouTube\Models\VideoDetails;
+use YouTube\Responses\GetVideoInfo;
+use YouTube\Responses\VideoPlayerJs;
+use YouTube\Responses\WatchVideoPage;
 use YouTube\Utils\Utils;
 
 class YouTubeDownloader
@@ -156,9 +157,15 @@ class YouTubeDownloader
         }
 
         // get player.js location that holds signature function
-        $player_js = $page->getCachedPlayerContents();
-        $result = $this->parseLinksFromPlayerResponse($player_response, $player_js);
+        $player_url = $page->getPlayerScriptUrl();
+        $response = $this->getBrowser()->cachedGet($player_url);
+        $player = new VideoPlayerJs($response);
 
-        return new DownloadOptions($result);
+        $links = $this->parseLinksFromPlayerResponse($player_response, $player);
+
+        // since we already have that information anyways...
+        $info = VideoDetails::fromPlayerResponseArray($player_response);
+
+        return new DownloadOptions($links, $info);
     }
 }

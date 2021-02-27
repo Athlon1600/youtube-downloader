@@ -22,7 +22,7 @@ $youtube = new \YouTube\YouTubeDownloader();
 try {
     $links = $youtube->getDownloadLinks($url);
 
-    $best = $links->getBestCombinedFormat();
+    $best = $links->getFirstCombinedFormat();
 
     if ($best) {
         send_json([

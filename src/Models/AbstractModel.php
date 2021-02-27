@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Data;
+namespace YouTube\Models;
 
 abstract class AbstractModel
 {

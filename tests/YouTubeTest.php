@@ -30,6 +30,6 @@ class YouTubeTest extends TestCase
 
         $ret = $downloader->getDownloadLinks(self::BUNNY);
 
-        $this->assertGreaterThan(0, count($ret->getAllLinks()));
+        $this->assertGreaterThan(0, count($ret->getAllFormats()));
     }
 }

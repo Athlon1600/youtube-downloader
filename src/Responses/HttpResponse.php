@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Resources;
+namespace YouTube\Responses;
 
 use Curl\Response;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Data;
+namespace YouTube\Models;
 
 class StreamFormat extends AbstractModel
 {
@@ -15,4 +15,9 @@ class StreamFormat extends AbstractModel
     public $audioSampleRate;
     public $url;
     public $signatureCipher;
+
+    public function getCleanMimeType()
+    {
+        return trim(preg_replace('/;.*/', '', $this->mimeType));
+    }
 }
