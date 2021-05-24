@@ -49,6 +49,7 @@ class YouTubeDownloader
         $video_id = Utils::extractVideoId($video_id);
 
         $response = $this->client->get("https://www.youtube.com/get_video_info?" . http_build_query([
+                'html5' => 1,
                 'video_id' => $video_id,
                 'eurl' => 'https://youtube.googleapis.com/v/' . $video_id,
                 'el' => 'embedded' // or detailpage. default: embedded, will fail if video is not embeddable
