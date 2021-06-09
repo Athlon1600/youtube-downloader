@@ -8,13 +8,8 @@
 <body>
 
 <h1>YouTube Downloader</h1>
-
-<p>
-    <a href="https://github.com/Athlon1600/youtube-downloader">https://github.com/Athlon1600/youtube-downloader</a>
-</p>
-
 <form>
-    <input type="text" value="https://www.youtube.com/watch?v=aqz-KE-bpKQ" size="80" id="txt_url">
+    <input type="text" value="https://www.youtube.com/watch?v=vCDDYb_M2B4" placeholder="https://www.youtube.com/watch?v=aqz-KE-bpKQ" size="80" id="txt_url">
     <input type="button" id="btn_fetch" value="Fetch">
 </form>
 
@@ -22,7 +17,9 @@
     <source src="" type="video/mp4"/>
     <em>Sorry, your browser doesn't support HTML5 video.</em>
 </video>
-
+<p>
+    Source: <a href="https://github.com/Athlon1600/youtube-downloader">https://github.com/Athlon1600/youtube-downloader</a>
+</p>
 
 <script>
     $(function () {
@@ -55,6 +52,7 @@
                     alert('No video found!');
                     return;
                 }
+                
 
                 var stream_url = 'stream.php?url=' + encodeURIComponent(first);
 
