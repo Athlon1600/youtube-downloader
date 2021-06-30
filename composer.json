@@ -4,7 +4,7 @@
 	"keywords": ["youtube downloader", "download youtube", "download youtube videos"],
 	"license": "MIT",
 	"require": {
-		"php": "^5.6 || ^7.0",
+		"php": "^5.6 || ^7.0 || ^8.0",
 		"ext-curl": "*",
 		"ext-json": "*",
 		"athlon1600/php-curl-file-downloader": "^1.0"
