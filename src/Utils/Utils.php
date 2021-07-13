@@ -64,4 +64,13 @@ class Utils
 
         return $url;
     }
+
+    public static function getInputValueByName($html, $name)
+    {
+        if (preg_match("/name=(['\"]){$name}\\1[^>]+value=(['\"])(.*?)\\2/is", $html, $matches)) {
+            return $matches[3];
+        }
+
+        return null;
+    }
 }
