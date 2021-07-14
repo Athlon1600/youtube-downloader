@@ -10,7 +10,7 @@
 		"athlon1600/php-curl-file-downloader": "^1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^5.7|6.2|^7.0"
+		"phpunit/phpunit": "^5.7|6.2|^7.0|^8.0"
 	},
 	"autoload": {
 		"psr-4": {
