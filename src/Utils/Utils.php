@@ -11,8 +11,12 @@ class Utils
      */
     public static function extractVideoId($str)
     {
-        if (preg_match('/[a-z0-9_-]{11}/i', $str, $matches)) {
-            return $matches[0];
+        if (strlen($str) === 11) {
+            return $str;
+        }
+
+        if (preg_match('/(?:\/|%3D|v=|vi=)([a-z0-9_-]{11})(?:[%#?&]|$)/ui', $str, $matches)) {
+            return $matches[1];
         }
 
         return false;
