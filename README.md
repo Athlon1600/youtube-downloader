@@ -102,6 +102,19 @@ $youtube = new \YouTube\YouTubeStreamer();
 $youtube->stream('https://r4---sn-n4v7knll.googlevideo.com/videoplayback?...');
 ```
 
+- Pass in your own cookies/user-agent
+
+If you try downloading age-restricted videos, YouTube will ask you to login. The only way to make this work, is to login to your YouTube account in your own web-browser, export those newly set cookies from your browser into a file, and then pass it all to youtube-downloader for use.
+
+```php
+$youtube = new YouTubeDownloader();
+$youtube->getBrowser()->setCookieFile('./your_cookies.txt');
+$youtube->getBrowser()->setUserAgent('Opera 7.6');
+```
+
+See also:  
+https://github.com/ytdl-org/youtube-dl/blob/master/README.md#how-do-i-pass-cookies-to-youtube-dl
+
 
 ## How does it work
 
