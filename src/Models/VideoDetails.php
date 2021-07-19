@@ -6,7 +6,7 @@ use YouTube\Utils\Utils;
 
 class VideoDetails
 {
-    protected $videoDetails = array();
+    protected $videoDetails = [];
 
     private function __construct($videoDetails)
     {

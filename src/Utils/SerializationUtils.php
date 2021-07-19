@@ -16,7 +16,7 @@ class SerializationUtils
 
     public static function optionsFromArray($array)
     {
-        $links = array();
+        $links = [];
 
         foreach ($array as $item) {
             $links[] = new StreamFormat($item);

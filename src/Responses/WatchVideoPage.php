@@ -49,6 +49,6 @@ class WatchVideoPage extends HttpResponse
             return json_decode($match, true);
         }
 
-        return array();
+        return [];
     }
 }

@@ -7,7 +7,7 @@ class YouTubeStreamer
     // 4096
     protected $buffer_size = 256 * 1024;
 
-    protected $headers = array();
+    protected $headers = [];
     protected $headers_sent = false;
 
     protected $debug = false;
@@ -36,7 +36,7 @@ class YouTubeStreamer
         } else {
 
             // only headers we wish to forward back to the client
-            $forward = array('content-type', 'content-length', 'accept-ranges', 'content-range');
+            $forward = ['content-type', 'content-length', 'accept-ranges', 'content-range'];
 
             $parts = explode(':', $data, 2);
 
@@ -62,7 +62,7 @@ class YouTubeStreamer
     {
         $ch = curl_init();
 
-        $headers = array();
+        $headers = [];
         $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0';
 
         if (isset($_SERVER['HTTP_RANGE'])) {

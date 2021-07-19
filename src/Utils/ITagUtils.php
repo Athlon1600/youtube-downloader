@@ -25,7 +25,7 @@ class ITagUtils
             return json_decode($json, true);
         }
 
-        return array();
+        return [];
     }
 
     public static function transformFormats($formats)
@@ -68,7 +68,7 @@ class ITagUtils
     }
 
     // itag info does not change frequently, that is why we cache it here as a plain static array
-    private static $itag_detailed = array(
+    private static $itag_detailed = [
         5 => 'flv, video, 240p, audio',
         6 => 'flv, video, 270p, audio',
         13 => '3gp, video, audio',
@@ -150,5 +150,5 @@ class ITagUtils
         395 => 'video',
         396 => 'video',
         397 => 'video',
-    );
+    ];
 }

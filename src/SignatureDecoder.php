@@ -78,7 +78,7 @@ class SignatureDecoder
                 // extract javascript code for each one of those statement functions
                 preg_match_all('/(' . implode('|', $func_list) . '):function(.*?)\}/m', $player_html, $matches2, PREG_SET_ORDER);
 
-                $functions = array();
+                $functions = [];
 
                 // translate each function according to its use
                 foreach ($matches2 as $m) {
@@ -93,10 +93,10 @@ class SignatureDecoder
                 }
 
                 // FINAL STEP! convert it all to instructions set
-                $instructions = array();
+                $instructions = [];
 
                 foreach ($matches[2] as $index => $name) {
-                    $instructions[] = array($functions[$name], $matches[3][$index]);
+                    $instructions[] = [$functions[$name], $matches[3][$index]];
                 }
 
                 return $instructions;
