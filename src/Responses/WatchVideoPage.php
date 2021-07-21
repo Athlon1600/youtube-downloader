@@ -2,6 +2,7 @@
 
 namespace YouTube\Responses;
 
+use YouTube\Models\VideoInfo;
 use YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
@@ -50,5 +51,52 @@ class WatchVideoPage extends HttpResponse
         }
 
         return array();
+    }
+
+    protected function getInitialData()
+    {
+        // TODO: this does not appear for mobile
+        if (preg_match('/ytInitialData\s*=\s*({.+?})\s*;/i', $this->getResponseBody(), $matches)) {
+            $json = $matches[1];
+            return json_decode($json, true);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return VideoInfo
+     */
+    public function getVideoInfo()
+    {
+        $playerResponse = $this->getPlayerResponse();
+
+        $thumbnails = Utils::arrayGet($playerResponse, 'videoDetails.thumbnail.thumbnails', []);
+
+        $thumbnail_url = null;
+        $thumb_max_width = 0;
+
+        foreach ($thumbnails as $thumbnail) {
+
+            if ($thumbnail['width'] > $thumb_max_width) {
+                $thumbnail_url = $thumbnail['url'];
+                $thumb_max_width = $thumbnail['width'];
+            }
+        }
+
+        $data = array(
+            'id' => Utils::arrayGet($playerResponse, 'videoDetails.videoId'),
+            'title' => Utils::arrayGet($playerResponse, 'videoDetails.title'),
+            'description' => Utils::arrayGet($playerResponse, 'videoDetails.shortDescription'),
+            'pageUrl' => $this->getResponse()->info->url,
+            'uploadDate' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.uploadDate'),
+            'viewCount' => Utils::arrayGet($playerResponse, 'videoDetails.viewCount'),
+            'thumbnail' => $thumbnail_url,
+            'duration' => Utils::arrayGet($playerResponse, 'videoDetails.lengthSeconds'),
+            'keywords' => Utils::arrayGet($playerResponse, 'videoDetails.keywords'),
+            'regionsAllowed' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.availableCountries')
+        );
+
+        return new VideoInfo($data);
     }
 }
