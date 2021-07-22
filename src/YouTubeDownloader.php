@@ -2,10 +2,11 @@
 
 namespace YouTube;
 
-use YouTube\Models\StreamFormat;
 use YouTube\Exception\TooManyRequestsException;
+use YouTube\Exception\VideoNotFoundException;
 use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
+use YouTube\Models\StreamFormat;
 use YouTube\Models\VideoDetails;
 use YouTube\Responses\GetVideoInfo;
 use YouTube\Responses\VideoPlayerJs;
@@ -142,8 +143,10 @@ class YouTubeDownloader
 
         if ($page->isTooManyRequests()) {
             throw new TooManyRequestsException($page);
-        } else if (!$page->isStatusOkay()) {
-            throw new YouTubeException('Video not found');
+        } elseif (!$page->isStatusOkay()) {
+            throw new YouTubeException('Page failed to load. HTTP error: ' . $page->getResponse()->error);
+        } elseif ($page->isVideoNotFound()) {
+            throw new VideoNotFoundException();
         }
 
         // get JSON encoded parameters that appear on video pages

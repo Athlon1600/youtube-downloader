@@ -15,6 +15,11 @@ class WatchVideoPage extends HttpResponse
             strpos($this->getResponseBody(), '/recaptcha/') !== false;
     }
 
+    public function isVideoNotFound()
+    {
+        return strpos($this->getResponseBody(), '<title> - YouTube</title>') !== false;
+    }
+
     public function hasPlayableVideo()
     {
         $playerResponse = $this->getPlayerResponse();
@@ -94,7 +99,7 @@ class WatchVideoPage extends HttpResponse
             'thumbnail' => $thumbnail_url,
             'duration' => Utils::arrayGet($playerResponse, 'videoDetails.lengthSeconds'),
             'keywords' => Utils::arrayGet($playerResponse, 'videoDetails.keywords'),
-            'regionsAllowed' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.availableCountries')
+            'regionsAllowed' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.availableCountries', [])
         );
 
         return new VideoInfo($data);
