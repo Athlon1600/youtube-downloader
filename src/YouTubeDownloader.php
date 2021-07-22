@@ -3,6 +3,7 @@
 namespace YouTube;
 
 use YouTube\Models\StreamFormat;
+use YouTube\Exception\ConsentCookiesException;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
@@ -144,7 +145,10 @@ class YouTubeDownloader
             throw new TooManyRequestsException($page);
         } else if (!$page->isStatusOkay()) {
             throw new YouTubeException('Video not found');
-        }
+        }/* else if (false) {
+            throw new ConsentCookiesException();
+        }*/
+        // TODO: check if body title is "Before you continue to YouTube" (see here: https://consent.youtube.com/ml?continue=https://www.youtube.com/channel/UCh2rDh7vXGeoh1LlzL3QEwg/videos&gl=GB&hl=en-GB&pc=yt&src=1)
 
         // get JSON encoded parameters that appear on video pages
         $player_response = $page->getPlayerResponse();
