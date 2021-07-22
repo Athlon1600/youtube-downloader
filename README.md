@@ -116,6 +116,13 @@ See also:
 https://github.com/ytdl-org/youtube-dl/blob/master/README.md#how-do-i-pass-cookies-to-youtube-dl
 
 
+- Consent youtube cookies (in case you get redirected):
+
+```php
+$youtube->getBrowser()->consentCookies(); // Call this before getDownloadsLinks()
+```
+
+
 ## How does it work
 
 A more detailed explanation on how to download videos from YouTube will be written soon.
