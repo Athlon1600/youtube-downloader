@@ -100,7 +100,7 @@ class WatchVideoPage extends HttpResponse
             'viewCount' => Utils::arrayGet($playerResponse, 'videoDetails.viewCount'),
             'thumbnail' => $thumbnail_url,
             'duration' => Utils::arrayGet($playerResponse, 'videoDetails.lengthSeconds'),
-            'keywords' => Utils::arrayGet($playerResponse, 'videoDetails.keywords'),
+            'keywords' => Utils::arrayGet($playerResponse, 'videoDetails.keywords', []),
             'regionsAllowed' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.availableCountries', [])
         );
 
