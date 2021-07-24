@@ -91,6 +91,8 @@ class WatchVideoPage extends HttpResponse
 
         $data = array(
             'id' => Utils::arrayGet($playerResponse, 'videoDetails.videoId'),
+            'channelId' => Utils::arrayGet($playerResponse, 'videoDetails.channelId'),
+            'channelTitle' => Utils::arrayGet($playerResponse, 'videoDetails.author'),
             'title' => Utils::arrayGet($playerResponse, 'videoDetails.title'),
             'description' => Utils::arrayGet($playerResponse, 'videoDetails.shortDescription'),
             'pageUrl' => $this->getResponse()->info->url,

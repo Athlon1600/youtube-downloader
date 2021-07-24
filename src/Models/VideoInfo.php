@@ -7,6 +7,9 @@ class VideoInfo extends AbstractModel
     // uniquely identifies this video
     public $id;
 
+    public $channelId;
+    public $channelTitle;
+
     public $title;
     public $description;
     public $uploadDate;
