@@ -115,6 +115,15 @@ $youtube->getBrowser()->setUserAgent('Opera 7.6');
 See also:  
 https://github.com/ytdl-org/youtube-dl/blob/master/README.md#how-do-i-pass-cookies-to-youtube-dl
 
+- Before you continue to YouTube...
+
+Depending on your region, you might be force redirected to a [page](https://unblockvideos.com/images/before-you-continue-cookies.jpg) that asks you to agree to Google's cookie policy.
+You can programmatically agree to those terms, and bypass that warning permanently via `consentCookies` method on your Browser instance. Example:  
+```php
+$youtube = new YouTubeDownloader();
+$youtube->getBrowser()->consentCookies();
+```
+
 
 ## How does it work
 
