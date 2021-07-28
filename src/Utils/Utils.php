@@ -22,6 +22,23 @@ class Utils
         return false;
     }
 
+    public static function extractChannel($url)
+    {
+        if (strpos($url, 'UC') === 0 && strlen($url) == 24) {
+            return $url;
+        }
+
+        if (preg_match('/channel\/(UC\w{22})/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        if (preg_match('/\/(?:user|c)\/(\w+)/i', $url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
     public static function arrayGet($array, $key, $default = null)
     {
         foreach (explode('.', $key) as $segment) {
