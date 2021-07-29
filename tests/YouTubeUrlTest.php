@@ -26,6 +26,7 @@ class YouTubeUrlTest extends TestCase
     {
         $tests = [
             'https://www.youtube.com/channel/UCkRfArvrzheW2E7b6SVT7vQ' => 'UCkRfArvrzheW2E7b6SVT7vQ',
+            'https://www.youtube.com/channel/UC295-Dw_tDNtZXFeAPAW6Aw' => 'UC295-Dw_tDNtZXFeAPAW6Aw',
             // 'https://www.youtube.com/user/creatoracademy' => 'creatoracademy',
             'https://www.youtube.com/c/YouTubeCreators' => 'YouTubeCreators',
             'https://www.youtube.com/c/youtubecreators/videos' => 'youtubecreators',

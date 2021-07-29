@@ -35,7 +35,7 @@ class Utils
             return $url;
         }
 
-        if (preg_match('/channel\/(UC\w{22})/', $url, $matches)) {
+        if (preg_match('/channel\/(UC[\w-]{22})/', $url, $matches)) {
             return $matches[1];
         }
 
