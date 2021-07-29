@@ -22,6 +22,13 @@ class Utils
         return false;
     }
 
+    /**
+     * Will parse either channel ID or username from custom URL.
+     * Will not parse legacy usernames as those cannot be queried via YouTube API
+     * https://support.google.com/youtube/answer/6180214?hl=en
+     * @param $url
+     * @return mixed|null
+     */
     public static function extractChannel($url)
     {
         if (strpos($url, 'UC') === 0 && strlen($url) == 24) {
@@ -32,7 +39,7 @@ class Utils
             return $matches[1];
         }
 
-        if (preg_match('/\/(?:user|c)\/(\w+)/i', $url, $matches)) {
+        if (preg_match('/\/c\/(\w+)/i', $url, $matches)) {
             return $matches[1];
         }
 
