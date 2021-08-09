@@ -45,6 +45,7 @@ class YouTubeDownloader
         return [];
     }
 
+    // No longer working...
     public function getVideoInfo($video_id)
     {
         $video_id = Utils::extractVideoId($video_id);
@@ -130,6 +131,25 @@ class YouTubeDownloader
         return $return;
     }
 
+    protected function getPlayerResponseViaPlayerEndpoint($video_id)
+    {
+        $response = $this->client->post("https://www.youtube.com/youtubei/v1/player", json_encode([
+            "context" => [
+                "client" => [
+                    "clientName" => "WEB",
+                    "clientVersion" => "2.20210721.00.00",
+                    "clientScreen" => "EMBED"
+                ]
+            ],
+            "videoId" => $video_id
+        ]), [
+            'Content-Type' => 'application/json',
+            'X-Goog-Api-Key' => 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+        ]);
+
+        return json_decode($response->body, true);
+    }
+
     /**
      * @param $video_id
      * @param array $options
@@ -155,7 +175,8 @@ class YouTubeDownloader
         // it may ask you to "Sign in to confirm your age"
         // we can bypass that by querying /get_video_info
         if (!$page->hasPlayableVideo()) {
-            $player_response = $this->getVideoInfo($video_id)->getPlayerResponse();
+            // $player_response = $this->getVideoInfo($video_id)->getPlayerResponse();
+            $player_response = $this->getPlayerResponseViaPlayerEndpoint($video_id);
         }
 
         if (empty($player_response)) {
