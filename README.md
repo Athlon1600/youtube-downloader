@@ -140,6 +140,7 @@ https://github.com/Athlon1600/youtube-downloader/pull/25#issuecomment-439373506
 
 ## To-do list
 
+- Find a way to get around YouTube's throttling system that limits downloading speed to less than 100 kb/s for most most videos now...
 - Add ability to solve YouTube Captcha and avoid `HTTP 429 Too Many Requests` errors.
 - Add ability to download video and audio streams separately, and merge the two together using ffmpeg. Just like `youtube-dl` does!  
 - Optional command that finds ALL video formats.
