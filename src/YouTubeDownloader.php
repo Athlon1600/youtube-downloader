@@ -99,7 +99,7 @@ class YouTubeDownloader
         $formats_combined = array_merge($formats, $adaptiveFormats);
 
         // final response
-        $return = array();
+        $return = [];
 
         foreach ($formats_combined as $format) {
 
@@ -157,7 +157,7 @@ class YouTubeDownloader
      * @throws TooManyRequestsException
      * @throws YouTubeException
      */
-    public function getDownloadLinks($video_id, $options = array())
+    public function getDownloadLinks($video_id, $options = [])
     {
         $page = $this->getPage($video_id);
 
