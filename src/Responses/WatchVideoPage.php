@@ -86,6 +86,10 @@ class WatchVideoPage extends HttpResponse
     {
         $playerResponse = $this->getPlayerResponse();
 
+        if ($playerResponse) {
+            $playerResponse = $playerResponse->all();
+        }
+
         $thumbnails = Utils::arrayGet($playerResponse, 'videoDetails.thumbnail.thumbnails', []);
 
         $thumbnail_url = null;

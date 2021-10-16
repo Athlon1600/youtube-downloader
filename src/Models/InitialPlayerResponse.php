@@ -18,6 +18,11 @@ class InitialPlayerResponse
         $this->ytInitialPlayerResponse = $ytInitialPlayerResponse;
     }
 
+    public function all()
+    {
+        return $this->ytInitialPlayerResponse;
+    }
+
     protected function query($key)
     {
         return Utils::arrayGet($this->ytInitialPlayerResponse, $key);
