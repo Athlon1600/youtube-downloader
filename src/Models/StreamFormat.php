@@ -20,4 +20,9 @@ class StreamFormat extends AbstractModel
     {
         return trim(preg_replace('/;.*/', '', $this->mimeType));
     }
+
+    public function hasRateBypass()
+    {
+        return strpos($this->url, 'ratebypass') !== false;
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace YouTube\Responses;
 
+use YouTube\Models\InitialPlayerResponse;
 use YouTube\Models\VideoInfo;
+use YouTube\Models\YouTubeConfigData;
 use YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
@@ -23,9 +25,7 @@ class WatchVideoPage extends HttpResponse
     public function hasPlayableVideo()
     {
         $playerResponse = $this->getPlayerResponse();
-        $playabilityStatus = Utils::arrayGet($playerResponse, 'playabilityStatus.status');
-
-        return $this->getResponse()->status == 200 && $playabilityStatus == 'OK';
+        return $this->getResponse()->status == 200 && $playerResponse->isPlayabilityStatusOkay();
     }
 
     /**
@@ -51,11 +51,21 @@ class WatchVideoPage extends HttpResponse
         $re = '/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/i';
 
         if (preg_match($re, $this->getResponseBody(), $matches)) {
-            $match = $matches[1];
-            return json_decode($match, true);
+            $data = json_decode($matches[1], true);
+            return new InitialPlayerResponse($data);
         }
 
-        return array();
+        return null;
+    }
+
+    public function getYouTubeConfigData()
+    {
+        if (preg_match('/ytcfg.set\(({.*?})\)/', $this->getResponseBody(), $matches)) {
+            $data = json_decode($matches[1], true);
+            return new YouTubeConfigData($data);
+        }
+
+        return null;
     }
 
     protected function getInitialData()

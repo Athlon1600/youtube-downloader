@@ -8,6 +8,7 @@ use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\StreamFormat;
 use YouTube\Models\VideoDetails;
+use YouTube\Models\YouTubeConfigData;
 use YouTube\Responses\GetVideoInfo;
 use YouTube\Responses\VideoPlayerJs;
 use YouTube\Responses\WatchVideoPage;
@@ -131,20 +132,32 @@ class YouTubeDownloader
         return $return;
     }
 
-    protected function getPlayerResponseViaPlayerEndpoint($video_id)
+    protected function getPlayerResponseViaPlayerEndpoint($video_id, YouTubeConfigData $configData)
     {
-        $response = $this->client->post("https://www.youtube.com/youtubei/v1/player", json_encode([
+        // $api_key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
+
+        // exact params matter, because otherwise "slow" download links will be returned
+        $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
                 "client" => [
-                    "clientName" => "WEB",
-                    "clientVersion" => "2.20210721.00.00",
-                    "clientScreen" => "EMBED"
+                    "clientName" => "ANDROID",
+                    "clientVersion" => "16.20",
+                    "hl" => "en"
                 ]
             ],
-            "videoId" => $video_id
+            "videoId" => $video_id,
+            "playbackContext" => [
+                "contentPlaybackContext" => [
+                    "html5Preference" => "HTML5_PREF_WANTS"
+                ]
+            ],
+            "contentCheckOk" => true,
+            "racyCheckOk" => true
         ]), [
             'Content-Type' => 'application/json',
-            'X-Goog-Api-Key' => 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+            'X-Goog-Visitor-Id' => $configData->getGoogleVisitorId(),
+            'X-Youtube-Client-Name' => $configData->getClientName(),
+            'X-Youtube-Client-Version' => $configData->getClientVersion()
         ]);
 
         return json_decode($response->body, true);
@@ -161,6 +174,8 @@ class YouTubeDownloader
     {
         $page = $this->getPage($video_id);
 
+        $video_id = Utils::extractVideoId($video_id);
+
         if ($page->isTooManyRequests()) {
             throw new TooManyRequestsException($page);
         } elseif (!$page->isStatusOkay()) {
@@ -169,15 +184,10 @@ class YouTubeDownloader
             throw new VideoNotFoundException();
         }
 
-        // get JSON encoded parameters that appear on video pages
-        $player_response = $page->getPlayerResponse();
+        $youtube_config_data = $page->getYouTubeConfigData();
 
-        // it may ask you to "Sign in to confirm your age"
-        // we can bypass that by querying /get_video_info
-        if (!$page->hasPlayableVideo()) {
-            // $player_response = $this->getVideoInfo($video_id)->getPlayerResponse();
-            $player_response = $this->getPlayerResponseViaPlayerEndpoint($video_id);
-        }
+        // the most reliable way of fetching all download links no matter what
+        $player_response = $this->getPlayerResponseViaPlayerEndpoint($video_id, $youtube_config_data);
 
         if (empty($player_response)) {
             throw new VideoPlayerNotFoundException();
