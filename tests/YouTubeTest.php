@@ -2,15 +2,12 @@
 
 namespace YouTube\Tests;
 
-use PHPUnit\Framework\TestCase;
 use YouTube\Browser;
+use YouTube\Exception\YouTubeException;
 use YouTube\YouTubeDownloader;
 
 class YouTubeTest extends TestCase
 {
-    // We assume that this video will never get taken down
-    const BUNNY = 'https://www.youtube.com/watch?v=aqz-KE-bpKQ';
-
     public function test_browser_cookies()
     {
         $browser = new Browser();
@@ -28,8 +25,20 @@ class YouTubeTest extends TestCase
     {
         $downloader = new YouTubeDownloader();
 
-        $ret = $downloader->getDownloadLinks(self::BUNNY);
+        $ret = $downloader->getDownloadLinks(self::BUNNY_VIDEO_ID);
 
         $this->assertGreaterThan(0, count($ret->getAllFormats()));
+    }
+
+    public function test_get_download_links_bad_video()
+    {
+        $downloader = new YouTubeDownloader();
+
+        try {
+            $downloader->getDownloadLinks(self::NOT_FOUND_VIDEO);
+            $this->fail();
+        } catch (YouTubeException $exception) {
+            $this->assertTrue(true);
+        }
     }
 }

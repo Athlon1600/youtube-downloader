@@ -15,4 +15,5 @@ abstract class TestCase extends BaseTestCase
 
     // We assume that this video will never get taken down
     const BUNNY_VIDEO_ID = 'https://www.youtube.com/watch?v=aqz-KE-bpKQ';
+    const NOT_FOUND_VIDEO = 'https://www.youtube.com/watch?v=XXXXXXXXXXX';
 }

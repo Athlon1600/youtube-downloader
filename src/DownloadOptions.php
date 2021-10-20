@@ -7,6 +7,7 @@ use YouTube\Models\StreamFormat;
 use YouTube\Models\VideoDetails;
 use YouTube\Utils\Utils;
 
+// TODO: rename DownloaderResponse
 class DownloadOptions
 {
     /** @var StreamFormat[] $formats */
