@@ -4,12 +4,11 @@ namespace YouTube;
 
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoNotFoundException;
-use YouTube\Exception\VideoPlayerNotFoundException;
 use YouTube\Exception\YouTubeException;
-use YouTube\Models\StreamFormat;
 use YouTube\Models\VideoDetails;
 use YouTube\Models\YouTubeConfigData;
 use YouTube\Responses\GetVideoInfo;
+use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
 use YouTube\Responses\WatchVideoPage;
 use YouTube\Utils\Utils;
@@ -90,49 +89,10 @@ class YouTubeDownloader
      */
     public function parseLinksFromPlayerResponse($player_response, VideoPlayerJs $player)
     {
-        $js_code = $player->getResponseBody();
-
-        $formats = Utils::arrayGet($player_response, 'streamingData.formats', []);
-
-        // video only or audio only streams
-        $adaptiveFormats = Utils::arrayGet($player_response, 'streamingData.adaptiveFormats', []);
-
-        $formats_combined = array_merge($formats, $adaptiveFormats);
-
-        // final response
-        $return = array();
-
-        foreach ($formats_combined as $format) {
-
-            // appear as either "cipher" or "signatureCipher"
-            $cipher = Utils::arrayGet($format, 'cipher', Utils::arrayGet($format, 'signatureCipher', ''));
-
-            // some videos do not need to be decrypted!
-            if (isset($format['url'])) {
-                $return[] = new StreamFormat($format);
-                continue;
-            }
-
-            $cipherArray = Utils::parseQueryString($cipher);
-
-            $url = Utils::arrayGet($cipherArray, 'url');
-            $sp = Utils::arrayGet($cipherArray, 'sp'); // used to be 'sig'
-            $signature = Utils::arrayGet($cipherArray, 's');
-
-            $decoded_signature = (new SignatureDecoder())->decode($signature, $js_code);
-
-            $decoded_url = $url . '&' . $sp . '=' . $decoded_signature;
-
-            $streamUrl = new StreamFormat($format);
-            $streamUrl->url = $decoded_url;
-
-            $return[] = $streamUrl;
-        }
-
-        return $return;
+        return [];
     }
 
-    protected function getPlayerResponseViaPlayerEndpoint($video_id, YouTubeConfigData $configData)
+    protected function getPlayerApiResponse($video_id, YouTubeConfigData $configData)
     {
         // $api_key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
 
@@ -160,7 +120,7 @@ class YouTubeDownloader
             'X-Youtube-Client-Version' => $configData->getClientVersion()
         ]);
 
-        return json_decode($response->body, true);
+        return new PlayerApiResponse($response);
     }
 
     /**
@@ -187,21 +147,20 @@ class YouTubeDownloader
         $youtube_config_data = $page->getYouTubeConfigData();
 
         // the most reliable way of fetching all download links no matter what
-        $player_response = $this->getPlayerResponseViaPlayerEndpoint($video_id, $youtube_config_data);
-
-        if (empty($player_response)) {
-            throw new VideoPlayerNotFoundException();
-        }
+        $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
 
         // get player.js location that holds signature function
         $player_url = $page->getPlayerScriptUrl();
         $response = $this->getBrowser()->cachedGet($player_url);
         $player = new VideoPlayerJs($response);
 
-        $links = $this->parseLinksFromPlayerResponse($player_response, $player);
+        $parser = PlayerResponseParser::createFrom($player_response);
+        $parser->setPlayerJsResponse($player);
+
+        $links = $parser->parseLinks();
 
         // since we already have that information anyways...
-        $info = VideoDetails::fromPlayerResponseArray($player_response);
+        $info = VideoDetails::fromPlayerResponseArray($player_response->getJson());
 
         return new DownloadOptions($links, $info);
     }

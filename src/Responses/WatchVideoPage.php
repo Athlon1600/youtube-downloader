@@ -44,6 +44,7 @@ class WatchVideoPage extends HttpResponse
         return null;
     }
 
+    // returns very similar response to what you get when you query /youtubei/v1/player
     public function getPlayerResponse()
     {
         // $re = '/ytplayer.config\s*=\s*([^\n]+});ytplayer/i';
