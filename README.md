@@ -137,6 +137,7 @@ https://github.com/Athlon1600/youtube-downloader/pull/25#issuecomment-439373506
 - https://github.com/Athlon1600/php-curl-file-downloader
 - https://github.com/TeamNewPipe/NewPipeExtractor/blob/d83787a5ca308c4ca4e86e63a8b63c5e7c4708d6/extractor/src/main/java/org/schabi/newpipe/extractor/services/youtube/extractors/YoutubeStreamExtractor.java
 - https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py
+- https://github.com/yt-dlp/yt-dlp
 
 ## To-do list
 
