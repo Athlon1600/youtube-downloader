@@ -81,8 +81,13 @@ class YouTubeStreamer
         curl_setopt($ch, CURLOPT_BUFFERSIZE, $this->buffer_size);
         curl_setopt($ch, CURLOPT_URL, $url);
 
+        // https://php.watch/articles/php-curl-security-hardening#curl-protocols
+        curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+
         //curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
 
         // we deal with this ourselves
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
