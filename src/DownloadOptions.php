@@ -59,7 +59,7 @@ class DownloadOptions
     {
         return Utils::arrayFilterReset($this->getAllFormats(), function ($format) {
             /** @var $format StreamFormat */
-            return strpos($format->mimeType, 'video') === 0 && !empty($format->audioQuality);
+            return strpos($format->mimeType, 'video') === 0 && !empty($format->audioQuality) && $format->quality === 'hd720';
         });
     }
 
