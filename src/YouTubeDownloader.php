@@ -17,7 +17,10 @@ class YouTubeDownloader
 {
     protected $client;
 
-    function __construct()
+    /** @var YoutubeClientHeaders */
+    protected $youtubeClientHeaders;
+
+    public function __construct()
     {
         $this->client = new Browser();
     }
@@ -25,6 +28,11 @@ class YouTubeDownloader
     public function getBrowser()
     {
         return $this->client;
+    }
+
+    public function getYoutubeClientHeaders()
+    {
+        return $this->youtubeClientHeaders;
     }
 
     /**
@@ -100,8 +108,8 @@ class YouTubeDownloader
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
                 "client" => [
-                    "clientName" => "ANDROID",
-                    "clientVersion" => "16.20",
+                    "clientName" => $this->youtubeClientHeaders->getClientName(),
+                    "clientVersion" => $this->youtubeClientHeaders->getClientVersion(),
                     "hl" => "en"
                 ]
             ],
