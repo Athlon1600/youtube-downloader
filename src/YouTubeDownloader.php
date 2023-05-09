@@ -23,6 +23,7 @@ class YouTubeDownloader
     public function __construct()
     {
         $this->client = new Browser();
+        $this->youtubeClientHeaders = new YoutubeClientHeaders();
     }
 
     public function getBrowser()
