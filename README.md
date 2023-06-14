@@ -58,7 +58,7 @@ composer require athlon1600/youtube-downloader "^3.0"
 Run locally:
 
 ```bash
-php -S localhost:8000 -t vendor/athlon1600/youtube-downloader/public
+php -S localhost:8000 -t public
 ```
 
 # Previous versions
