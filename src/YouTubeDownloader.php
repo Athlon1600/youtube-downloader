@@ -158,10 +158,13 @@ class YouTubeDownloader
         $parser->setPlayerJsResponse($player);
 
         $links = $parser->parseLinks();
-
+        
+        // All the caption links
+        $captions = $player_response->getAllCaptions();
+        
         // since we already have that information anyways...
         $info = VideoDetails::fromPlayerResponseArray($player_response->getJson());
 
-        return new DownloadOptions($links, $info);
+        return new DownloadOptions($links, $captions, $info);
     }
 }

@@ -13,12 +13,16 @@ class DownloadOptions
     /** @var StreamFormat[] $formats */
     private $formats;
 
+    /** @var Captions|null */
+    private $captions;
+
     /** @var VideoDetails|null */
     private $info;
 
-    public function __construct($formats, $info = null)
+    public function __construct($formats, $captions, $info = null)
     {
         $this->formats = $formats;
+        $this->captions = $captions;
         $this->info = $info;
     }
 
@@ -28,6 +32,14 @@ class DownloadOptions
     public function getAllFormats()
     {
         return $this->formats;
+    }
+    
+    /**
+     * @return Captions[]
+     */
+    public function getAllCaptions()
+    {
+        return $this->captions;
     }
 
     /**
