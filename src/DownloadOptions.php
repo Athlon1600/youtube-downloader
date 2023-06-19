@@ -103,6 +103,21 @@ class DownloadOptions
         return $copy;
     }
 
+    protected function getLowToHighCombinedFormats()
+    {
+        $copy = array_values($this->getCombinedFormats());
+
+        usort($copy, function ($a, $b) {
+
+            /** @var StreamFormat $a */
+            /** @var StreamFormat $b */
+
+            return $a->height - $b->height;
+        });
+
+        return $copy;
+    }
+
     // Combined using: ffmpeg -i video.mp4 -i audio.mp3 output.mp4
     public function getSplitFormats($quality = null)
     {
@@ -131,4 +146,23 @@ class DownloadOptions
             'audio' => $audio[floor(count($audio) / 2)]
         ]);
     }
+
+    // get best combined format by video quality
+    public function getBestCombinedFormat() {
+        $combined = $this->getLowToHighCombinedFormats();
+        return end($combined);
+    }
+
+    // get best video format by quality
+    public function getBestVideoFormat() {
+        $videos = $this->getLowToHighVideoFormats();
+        return end($videos);
+    }
+
+    // get best audio format by quality
+    public function getBestAudioFormat() {
+        $audios = $this->getLowToHighAudioFormats();
+        return end($audios);
+    }
+
 }
