@@ -50,11 +50,8 @@ class YouTubeStreamer
 
     public function bodyCallback($ch, $data)
     {
-        if (true) {
-            echo $data;
-            flush();
-        }
-
+        echo $data;
+        flush();
         return strlen($data);
     }
 

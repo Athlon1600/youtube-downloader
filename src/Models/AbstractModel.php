@@ -4,7 +4,7 @@ namespace YouTube\Models;
 
 abstract class AbstractModel
 {
-    public function __construct($array)
+    final public function __construct($array)
     {
         if (is_array($array)) {
             $this->fillFromArray($array);

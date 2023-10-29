@@ -7,7 +7,7 @@ class Utils
     /**
      * Extract youtube video_id from any piece of text
      * @param $str
-     * @return string
+     * @return mixed|string|null
      */
     public static function extractVideoId($str)
     {
@@ -15,11 +15,11 @@ class Utils
             return $str;
         }
 
-        if (preg_match('/(?:\/|%3D|v=|vi=)([a-z0-9_-]{11})(?:[%#?&]|$)/ui', $str, $matches)) {
+        if (preg_match('/(?:\/|%3D|v=|vi=)([a-z0-9_-]{11})(?:[%#?&\/]|$)/ui', $str, $matches)) {
             return $matches[1];
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -100,5 +100,13 @@ class Utils
         }
 
         return null;
+    }
+
+    public static function sendJson($data, $status = 200)
+    {
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_PRETTY_PRINT);
+        exit;
     }
 }

@@ -8,7 +8,7 @@ class VideoDetails
 {
     protected $videoDetails = array();
 
-    private function __construct($videoDetails)
+    private final function __construct($videoDetails)
     {
         $this->videoDetails = $videoDetails;
     }

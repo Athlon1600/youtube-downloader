@@ -4,13 +4,13 @@
 	"keywords": ["youtube downloader", "download youtube", "download youtube videos"],
 	"license": "MIT",
 	"require": {
-		"php": "^5.6 || ^7.0 || ^8.0",
+		"php": "^7.4|^8.0",
 		"ext-curl": "*",
 		"ext-json": "*",
 		"athlon1600/php-curl-file-downloader": "^1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^5.7|6.2|^7.0|^8.0"
+		"phpunit/phpunit": "^8.0 || ^9.0 || ^10.0"
 	},
 	"autoload": {
 		"psr-4": {

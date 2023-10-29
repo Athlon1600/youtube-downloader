@@ -17,7 +17,7 @@ class PlayerResponseParser
     /** @var VideoPlayerJs */
     protected $videoPlayerJs;
 
-    protected function __construct(PlayerApiResponse $response)
+    protected final function __construct(PlayerApiResponse $response)
     {
         $this->response = $response;
     }

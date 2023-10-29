@@ -60,7 +60,7 @@ class ITagUtils
 
     public static function parseItagInfo($itag)
     {
-        if (isset(static::$itag_detailed[$itag])) {
+        if (array_key_exists($itag, static::$itag_detailed)) {
             return static::$itag_detailed[$itag];
         }
 
@@ -68,7 +68,7 @@ class ITagUtils
     }
 
     // itag info does not change frequently, that is why we cache it here as a plain static array
-    private static $itag_detailed = array(
+    protected static $itag_detailed = array(
         5 => 'flv, video, 240p, audio',
         6 => 'flv, video, 270p, audio',
         13 => '3gp, video, audio',
