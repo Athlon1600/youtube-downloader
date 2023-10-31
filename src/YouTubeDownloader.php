@@ -5,7 +5,7 @@ namespace YouTube;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoNotFoundException;
 use YouTube\Exception\YouTubeException;
-use YouTube\Models\VideoDetails;
+use YouTube\Models\VideoInfo;
 use YouTube\Models\YouTubeConfigData;
 use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
@@ -46,6 +46,13 @@ class YouTubeDownloader
         }
 
         return [];
+    }
+
+    public function getVideoInfo(string $videoId): ?VideoInfo
+    {
+        $page = $this->getPage($videoId);
+        // TODO
+        return null;
     }
 
     public function getPage(string $url): WatchVideoPage
@@ -95,20 +102,22 @@ class YouTubeDownloader
 
     /**
      *
-     * TOOD: rename to DownloadResult??
-     *
      * @param string $video_id
-     * @param  $options
+     * @param array $extra
      * @return DownloadOptions
      * @throws TooManyRequestsException
      * @throws VideoNotFoundException
      * @throws YouTubeException
      */
-    public function getDownloadLinks(string $video_id, $options = null): DownloadOptions
+    public function getDownloadLinks(string $video_id, array $extra = []): DownloadOptions
     {
-        $page = $this->getPage($video_id);
-
         $video_id = Utils::extractVideoId($video_id);
+
+        if (!$video_id) {
+            throw new \InvalidArgumentException("Invalid Video ID: " . $video_id);
+        }
+
+        $page = $this->getPage($video_id);
 
         if ($page->isTooManyRequests()) {
             throw new TooManyRequestsException($page);
@@ -122,6 +131,7 @@ class YouTubeDownloader
         $youtube_config_data = $page->getYouTubeConfigData();
 
         // the most reliable way of fetching all download links no matter what
+        // query: /youtubei/v1/player for some additional data
         $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
 
         // get player.js location that holds signature function
@@ -129,13 +139,10 @@ class YouTubeDownloader
         $response = $this->getBrowser()->cachedGet($player_url);
         $player = new VideoPlayerJs($response);
 
-        $parser = PlayerResponseParser::createFrom($player_response);
-        $parser->setPlayerJsResponse($player);
-
-        $links = $parser->parseLinks();
+        $links = SignatureLinkParser::parseLinks($player_response, $player);
 
         // since we already have that information anyways...
-        $info = VideoDetails::fromPlayerResponseArray($player_response->getJson());
+        $info = PlayerVideoInfoMapper::map($player_response);
 
         return new DownloadOptions($links, $info);
     }

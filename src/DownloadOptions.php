@@ -2,9 +2,8 @@
 
 namespace YouTube;
 
-use YouTube\Models\SplitStream;
 use YouTube\Models\StreamFormat;
-use YouTube\Models\VideoDetails;
+use YouTube\Models\VideoInfo;
 use YouTube\Utils\Utils;
 
 // TODO: rename DownloaderResponse
@@ -13,10 +12,10 @@ class DownloadOptions
     /** @var StreamFormat[] $formats */
     private array $formats = [];
 
-    /** @var VideoDetails|null */
-    private ?VideoDetails $info;
+    /** @var VideoInfo|null */
+    private ?VideoInfo $info;
 
-    public function __construct($formats, $info = null)
+    public function __construct(array $formats, ?VideoInfo $info = null)
     {
         $this->formats = $formats;
         $this->info = $info;
@@ -31,9 +30,9 @@ class DownloadOptions
     }
 
     /**
-     * @return VideoDetails|null
+     * @return VideoInfo|null
      */
-    public function getInfo(): ?VideoDetails
+    public function getInfo(): ?VideoInfo
     {
         return $this->info;
     }

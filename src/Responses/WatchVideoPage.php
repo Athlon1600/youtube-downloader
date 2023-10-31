@@ -9,7 +9,10 @@ use YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
 {
-    public function isTooManyRequests()
+    const REGEX_INITIAL_PLAYER_RESPONSE = '/<script.*?var ytInitialPlayerResponse = (.*?});/';
+    const REGEX_INITIAL_DATA = '/<script.*?var ytInitialData = (.*?);<\/script>/';
+
+    public function isTooManyRequests(): bool
     {
         return
             strpos($this->getResponseBody(), 'We have been receiving a large volume of requests') !== false ||
@@ -17,12 +20,12 @@ class WatchVideoPage extends HttpResponse
             strpos($this->getResponseBody(), '/recaptcha/') !== false;
     }
 
-    public function isVideoNotFound()
+    public function isVideoNotFound(): bool
     {
         return strpos($this->getResponseBody(), '<title> - YouTube</title>') !== false;
     }
 
-    public function hasPlayableVideo()
+    public function hasPlayableVideo(): bool
     {
         $playerResponse = $this->getPlayerResponse();
         return $this->getResponse()->status == 200 && $playerResponse->isPlayabilityStatusOkay();
@@ -34,7 +37,7 @@ class WatchVideoPage extends HttpResponse
      *
      * @return string|null
      */
-    public function getPlayerScriptUrl()
+    public function getPlayerScriptUrl(): ?string
     {
         // check what player version that video is using
         if (preg_match('@<script\s*src="([^"]+player[^"]+js)@', $this->getResponseBody(), $matches)) {
@@ -45,13 +48,9 @@ class WatchVideoPage extends HttpResponse
     }
 
     // returns very similar response to what you get when you query /youtubei/v1/player
-    public function getPlayerResponse()
+    public function getPlayerResponse(): ?InitialPlayerResponse
     {
-        // $re = '/ytplayer.config\s*=\s*([^\n]+});ytplayer/i';
-        // $re = '/player_response":"(.*?)\"}};/';
-        $re = '/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/i';
-
-        if (preg_match($re, $this->getResponseBody(), $matches)) {
+        if (preg_match('/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/i', $this->getResponseBody(), $matches)) {
             $data = json_decode($matches[1], true);
             return new InitialPlayerResponse($data);
         }
@@ -59,7 +58,7 @@ class WatchVideoPage extends HttpResponse
         return null;
     }
 
-    public function getYouTubeConfigData()
+    public function getYouTubeConfigData(): ?YouTubeConfigData
     {
         if (preg_match('/ytcfg.set\(({.*?})\)/', $this->getResponseBody(), $matches)) {
             $data = json_decode($matches[1], true);
@@ -69,7 +68,7 @@ class WatchVideoPage extends HttpResponse
         return null;
     }
 
-    protected function getInitialData()
+    protected function getInitialData(): ?array
     {
         // TODO: this does not appear for mobile
         if (preg_match('/ytInitialData\s*=\s*({.+?})\s*;/i', $this->getResponseBody(), $matches)) {
@@ -83,7 +82,7 @@ class WatchVideoPage extends HttpResponse
     /**
      * @return VideoInfo
      */
-    public function getVideoInfo()
+    public function getVideoInfo(): ?VideoInfo
     {
         $playerResponse = $this->getPlayerResponse();
 

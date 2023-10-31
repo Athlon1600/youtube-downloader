@@ -7,37 +7,16 @@ use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
 use YouTube\Utils\Utils;
 
-class PlayerResponseParser
+class SignatureLinkParser
 {
     /**
-     * @var PlayerApiResponse
-     */
-    private $response;
-
-    /** @var VideoPlayerJs */
-    protected $videoPlayerJs;
-
-    protected final function __construct(PlayerApiResponse $response)
-    {
-        $this->response = $response;
-    }
-
-    public static function createFrom(PlayerApiResponse $playerApiResponse)
-    {
-        return new static($playerApiResponse);
-    }
-
-    public function setPlayerJsResponse(VideoPlayerJs $videoPlayerJs)
-    {
-        $this->videoPlayerJs = $videoPlayerJs;
-    }
-
-    /**
+     * @param PlayerApiResponse $apiResponse
+     * @param VideoPlayerJs|null $playerJs
      * @return StreamFormat[]
      */
-    public function parseLinks($signatureDecrypter = null)
+    public static function parseLinks(PlayerApiResponse $apiResponse, ?VideoPlayerJs $playerJs = null): array
     {
-        $formats_combined = $this->response->getAllFormats();
+        $formats_combined = $apiResponse->getAllFormats();
 
         // final response
         $return = array();
@@ -61,9 +40,9 @@ class PlayerResponseParser
 
             $streamUrl = new StreamFormat($format);
 
-            if ($this->videoPlayerJs) {
+            if ($playerJs) {
 
-                $decoded_signature = (new SignatureDecoder())->decode($signature, $this->videoPlayerJs->getResponseBody());
+                $decoded_signature = (new SignatureDecoder())->decode($signature, $playerJs->getResponseBody());
                 $decoded_url = $url . '&' . $sp . '=' . $decoded_signature;
 
                 $streamUrl->url = $decoded_url;
