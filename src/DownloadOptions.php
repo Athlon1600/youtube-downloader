@@ -11,10 +11,10 @@ use YouTube\Utils\Utils;
 class DownloadOptions
 {
     /** @var StreamFormat[] $formats */
-    private $formats;
+    private array $formats = [];
 
     /** @var VideoDetails|null */
-    private $info;
+    private ?VideoDetails $info;
 
     public function __construct($formats, $info = null)
     {
@@ -25,7 +25,7 @@ class DownloadOptions
     /**
      * @return StreamFormat[]
      */
-    public function getAllFormats()
+    public function getAllFormats(): array
     {
         return $this->formats;
     }
@@ -33,13 +33,13 @@ class DownloadOptions
     /**
      * @return VideoDetails|null
      */
-    public function getInfo()
+    public function getInfo(): ?VideoDetails
     {
         return $this->info;
     }
 
     // Will not include Videos with Audio
-    public function getVideoFormats()
+    public function getVideoFormats(): array
     {
         return Utils::arrayFilterReset($this->getAllFormats(), function ($format) {
             /** @var $format StreamFormat */
@@ -47,7 +47,7 @@ class DownloadOptions
         });
     }
 
-    public function getAudioFormats()
+    public function getAudioFormats(): array
     {
         return Utils::arrayFilterReset($this->getAllFormats(), function ($format) {
             /** @var $format StreamFormat */
@@ -58,7 +58,7 @@ class DownloadOptions
     /**
      * @return StreamFormat[]
      */
-    public function getCombinedFormats()
+    public function getCombinedFormats(): array
     {
         return Utils::arrayFilterReset($this->getAllFormats(), function ($format) {
             /** @var $format StreamFormat */
@@ -69,13 +69,13 @@ class DownloadOptions
     /**
      * @return StreamFormat|null
      */
-    public function getFirstCombinedFormat()
+    public function getFirstCombinedFormat(): ?StreamFormat
     {
         $combined = $this->getCombinedFormats();
         return count($combined) ? $combined[0] : null;
     }
 
-    protected function getLowToHighVideoFormats()
+    protected function getLowToHighVideoFormats(): array
     {
         $copy = array_values($this->getVideoFormats());
 
@@ -90,7 +90,7 @@ class DownloadOptions
         return $copy;
     }
 
-    protected function getLowToHighAudioFormats()
+    protected function getLowToHighAudioFormats(): array
     {
         $copy = array_values($this->getAudioFormats());
 
@@ -104,34 +104,5 @@ class DownloadOptions
         });
 
         return $copy;
-    }
-
-    // Combined using: ffmpeg -i video.mp4 -i audio.mp3 output.mp4
-    public function getSplitFormats($quality = null)
-    {
-        // sort formats by quality in desc, and high = first, medium = middle, low = last
-        $videos = $this->getLowToHighVideoFormats();
-        $audio = $this->getLowToHighAudioFormats();
-
-        if ($quality == 'high' || $quality == 'best') {
-
-            return new SplitStream([
-                'video' => $videos[count($videos) - 1],
-                'audio' => $audio[count($audio) - 1]
-            ]);
-
-        } else if ($quality == 'low' || $quality == 'worst') {
-
-            return new SplitStream([
-                'video' => $videos[0],
-                'audio' => $audio[0]
-            ]);
-        }
-
-        // something in between!
-        return new SplitStream([
-            'video' => $videos[floor(count($videos) / 2)],
-            'audio' => $audio[floor(count($audio) / 2)]
-        ]);
     }
 }
