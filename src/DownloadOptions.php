@@ -55,6 +55,9 @@ class DownloadOptions
         });
     }
 
+    /**
+     * @return StreamFormat[]
+     */
     public function getCombinedFormats()
     {
         return Utils::arrayFilterReset($this->getAllFormats(), function ($format) {

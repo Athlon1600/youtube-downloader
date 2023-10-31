@@ -7,7 +7,6 @@ use YouTube\Exception\VideoNotFoundException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\VideoDetails;
 use YouTube\Models\YouTubeConfigData;
-use YouTube\Responses\GetVideoInfo;
 use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
 use YouTube\Responses\WatchVideoPage;
@@ -15,27 +14,31 @@ use YouTube\Utils\Utils;
 
 class YouTubeDownloader
 {
-    protected $client;
+    protected Browser $client;
 
     function __construct()
     {
         $this->client = new Browser();
     }
 
-    public function getBrowser()
+    public function getBrowser(): Browser
     {
         return $this->client;
     }
 
     /**
-     * @param $query
+     * @param string $query
      * @return array
      */
-    public function getSearchSuggestions($query)
+    public function getSearchSuggestions(string $query): array
     {
         $query = rawurlencode($query);
 
-        $response = $this->client->get('http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=' . $query);
+        $response = $this->client->get('http://suggestqueries.google.com/complete/search', [
+            'client' => 'firefox',
+            'ds' => 'yt',
+            'q' => $query
+        ]);
         $json = json_decode($response->body, true);
 
         if (is_array($json) && count($json) >= 2) {
@@ -45,24 +48,7 @@ class YouTubeDownloader
         return [];
     }
 
-    // No longer working...
-    public function getVideoInfo($video_id)
-    {
-        $video_id = Utils::extractVideoId($video_id);
-
-        $response = $this->client->get("https://www.youtube.com/get_video_info?" . http_build_query([
-                'html5' => 1,
-                'video_id' => $video_id,
-                'eurl' => 'https://youtube.googleapis.com/v/' . $video_id,
-                'el' => 'embedded', // or detailpage. default: embedded, will fail if video is not embeddable
-                'c' => 'TVHTML5',
-                'cver' => '6.20180913'
-            ]));
-
-        return new GetVideoInfo($response);
-    }
-
-    public function getPage($url)
+    public function getPage(string $url): WatchVideoPage
     {
         $video_id = Utils::extractVideoId($url);
 
@@ -78,24 +64,8 @@ class YouTubeDownloader
         return new WatchVideoPage($response);
     }
 
-    /**
-     * To parse the links for the video we need two things:
-     * contents of `player_response` JSON object that appears on video pages
-     * contents of player.js script file that's included inside video pages
-     *
-     * @param array $player_response
-     * @param VideoPlayerJs $player
-     * @return array
-     */
-    public function parseLinksFromPlayerResponse($player_response, VideoPlayerJs $player)
+    protected function getPlayerApiResponse(string $video_id, YouTubeConfigData $configData): PlayerApiResponse
     {
-        return [];
-    }
-
-    protected function getPlayerApiResponse($video_id, YouTubeConfigData $configData)
-    {
-        // $api_key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
-
         // exact params matter, because otherwise "slow" download links will be returned
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
@@ -124,13 +94,17 @@ class YouTubeDownloader
     }
 
     /**
-     * @param $video_id
-     * @param array $options
+     *
+     * TOOD: rename to DownloadResult??
+     *
+     * @param string $video_id
+     * @param  $options
      * @return DownloadOptions
      * @throws TooManyRequestsException
+     * @throws VideoNotFoundException
      * @throws YouTubeException
      */
-    public function getDownloadLinks($video_id, $options = array())
+    public function getDownloadLinks(string $video_id, $options = null): DownloadOptions
     {
         $page = $this->getPage($video_id);
 
@@ -144,6 +118,7 @@ class YouTubeDownloader
             throw new VideoNotFoundException();
         }
 
+        // a giant JSON object holding useful data
         $youtube_config_data = $page->getYouTubeConfigData();
 
         // the most reliable way of fetching all download links no matter what
