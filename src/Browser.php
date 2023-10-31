@@ -7,17 +7,17 @@ use YouTube\Utils\Utils;
 
 class Browser extends BrowserClient
 {
-    public function setUserAgent($agent)
+    public function setUserAgent($agent): void
     {
         $this->headers['User-Agent'] = $agent;
     }
 
-    public function getUserAgent()
+    public function getUserAgent(): ?string
     {
         return Utils::arrayGet($this->headers, 'User-Agent');
     }
 
-    public function followRedirects($enabled)
+    public function followRedirects($enabled): self
     {
         $this->options[CURLOPT_FOLLOWLOCATION] = $enabled ? 1 : 0;
         return $this;
@@ -44,12 +44,12 @@ class Browser extends BrowserClient
         return $response;
     }
 
-    protected function getCacheKey($url)
+    protected function getCacheKey($url): string
     {
-        return md5($url) . '_v3';
+        return md5($url) . '_v4';
     }
 
-    public function consentCookies()
+    public function consentCookies(): void
     {
         $response = $this->get('https://www.youtube.com/');
         $current_url = $response->info->url;
