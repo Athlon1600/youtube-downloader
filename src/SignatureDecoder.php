@@ -12,7 +12,7 @@ class SignatureDecoder
      * @param $js_code
      * @return string
      */
-    public function decode($signature, $js_code)
+    public function decode(string $signature, string $js_code): string
     {
         $func_name = $this->parseFunctionName($js_code);
 
@@ -40,7 +40,7 @@ class SignatureDecoder
         return trim($signature);
     }
 
-    public function parseFunctionName($js_code)
+    public function parseFunctionName(string $js_code) : ?string
     {
         if (preg_match('@,\s*encodeURIComponent\((\w{2})@is', $js_code, $matches)) {
             $func_name = $matches[1];
@@ -56,7 +56,7 @@ class SignatureDecoder
     }
 
     // convert JS code for signature decipher to PHP code
-    public function parseFunctionCode($func_name, $player_html)
+    public function parseFunctionCode(string $func_name, string $player_html): ?array
     {
         // extract code block from that function
         // single quote in case function name contains $dollar sign
