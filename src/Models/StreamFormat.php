@@ -2,7 +2,7 @@
 
 namespace YouTube\Models;
 
-class StreamFormat extends AbstractModel
+class StreamFormat extends JsonObject
 {
     public ?int $itag = null;
     public ?string $mimeType = null;
