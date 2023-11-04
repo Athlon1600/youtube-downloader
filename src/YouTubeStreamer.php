@@ -22,7 +22,7 @@ class YouTubeStreamer
     }
 
     /**
-     * @param \CurlHandle|resource $ch
+     * @param resource $ch
      * @param string $data
      * @return int
      */
@@ -54,7 +54,7 @@ class YouTubeStreamer
     }
 
     /**
-     * @param \CurlHandle|resource $ch
+     * @param resource $ch
      * @param string $data
      * @return int
      */
