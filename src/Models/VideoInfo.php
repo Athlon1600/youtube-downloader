@@ -2,7 +2,10 @@
 
 namespace YouTube\Models;
 
-class VideoInfo extends AbstractModel
+/**
+ * General class for holding video info. Not all fields required
+ */
+class VideoInfo
 {
     // uniquely identifies this video
     public ?string $id;
@@ -12,22 +15,14 @@ class VideoInfo extends AbstractModel
 
     public ?string $title = null;
     public ?string $description = null;
-    public ?string $uploadDate;
+    public ?\DateTime $uploadDate;
 
-    // accessible by public
-    public ?string $pageUrl;
+    public ?string $category;
 
     public ?int $viewCount;
     public ?int $commentCount;
     public ?int $likeCount;
     public ?int $dislikeCount;
-
-    /**
-     * @var VideoThumbnail[]
-     */
-    public array $thumbnails;
-
-    public ?string $thumbnail;
 
     // in seconds
     public ?int $durationSeconds;

@@ -99,7 +99,7 @@ class DownloadOptions
             /** @var StreamFormat $a */
             /** @var StreamFormat $b */
 
-            return $a->contentLength - $b->contentLength;
+            return intval($a->contentLength) - intval($b->contentLength);
         });
 
         return $copy;

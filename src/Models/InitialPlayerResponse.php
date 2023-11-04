@@ -9,32 +9,23 @@ use YouTube\Utils\Utils;
  * JSON data that appears inside /watch?v= page [ytInitialPlayerResponse=]
  * @package YouTube\Models
  */
-class InitialPlayerResponse
+class InitialPlayerResponse extends JsonObject
 {
-    private $ytInitialPlayerResponse;
+    //public array $videoDetails;
+    //public array $microformat;
 
-    public function __construct($ytInitialPlayerResponse)
+    public function isPlayabilityStatusOkay(): bool
     {
-        $this->ytInitialPlayerResponse = $ytInitialPlayerResponse;
+        return $this->deepGet('playabilityStatus.status') == 'OK';
     }
 
-    public function all()
+    public function getVideoDetails(): ?array
     {
-        return $this->ytInitialPlayerResponse;
+        return $this->deepGet('videoDetails');
     }
 
-    protected function query($key)
+    public function getCaptionTracks(): array
     {
-        return Utils::arrayGet($this->ytInitialPlayerResponse, $key);
-    }
-
-    public function isPlayabilityStatusOkay()
-    {
-        return $this->query('playabilityStatus.status') == 'OK';
-    }
-
-    public function getVideoDetails()
-    {
-        return $this->query('videoDetails');
+        return (array)$this->deepGet("captions.playerCaptionsTracklistRenderer.captionTracks");
     }
 }

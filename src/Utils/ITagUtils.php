@@ -4,7 +4,7 @@ namespace YouTube\Utils;
 
 class ITagUtils
 {
-    public static function downloadFormats()
+    public static function downloadFormats(): array
     {
         $data = file_get_contents("https://raw.githubusercontent.com/ytdl-org/youtube-dl/master/youtube_dl/extractor/youtube.py");
 
@@ -28,7 +28,7 @@ class ITagUtils
         return array();
     }
 
-    public static function transformFormats($formats)
+    public static function transformFormats(array $formats): array
     {
         $results = [];
 
@@ -58,7 +58,7 @@ class ITagUtils
         return $results;
     }
 
-    public static function parseItagInfo($itag)
+    public static function parseItagInfo(int $itag): string
     {
         if (array_key_exists($itag, static::$itag_detailed)) {
             return static::$itag_detailed[$itag];
@@ -68,7 +68,7 @@ class ITagUtils
     }
 
     // itag info does not change frequently, that is why we cache it here as a plain static array
-    protected static $itag_detailed = array(
+    protected static array $itag_detailed = array(
         5 => 'flv, video, 240p, audio',
         6 => 'flv, video, 270p, audio',
         13 => '3gp, video, audio',

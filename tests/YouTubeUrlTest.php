@@ -34,8 +34,6 @@ class YouTubeUrlTest extends TestCase
             '' => null
         ];
 
-        $this->assertNull(Utils::extractChannel(null));
-
         foreach ($tests as $url => $expected) {
             $this->assertEquals($expected, Utils::extractChannel($url));
         }

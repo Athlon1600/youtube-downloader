@@ -2,39 +2,25 @@
 
 namespace YouTube\Models;
 
-use YouTube\Utils\Utils;
-
-class YouTubeConfigData
+class YouTubeConfigData extends JsonObject
 {
-    private $data;
-
-    public function __construct($data)
+    public function getGoogleVisitorId(): ?string
     {
-        $this->data = $data;
+        return $this->deepGet('VISITOR_DATA');
     }
 
-    protected function query($key)
+    public function getClientName(): ?string
     {
-        return Utils::arrayGet($this->data, $key);
+        return $this->deepGet('INNERTUBE_CONTEXT_CLIENT_NAME');
     }
 
-    public function getGoogleVisitorId()
+    public function getClientVersion(): ?string
     {
-        return $this->query('VISITOR_DATA');
+        return $this->deepGet('INNERTUBE_CONTEXT_CLIENT_VERSION');
     }
 
-    public function getClientName()
+    public function getApiKey(): ?string
     {
-        return $this->query('INNERTUBE_CONTEXT_CLIENT_NAME');
-    }
-
-    public function getClientVersion()
-    {
-        return $this->query('INNERTUBE_CONTEXT_CLIENT_VERSION');
-    }
-
-    public function getApiKey()
-    {
-        return $this->query('INNERTUBE_API_KEY');
+        return $this->deepGet('INNERTUBE_API_KEY');
     }
 }

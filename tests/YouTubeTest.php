@@ -18,7 +18,7 @@ class YouTubeTest extends TestCase
         // list cookies
         $list = $browser->get('https://httpbin.org/cookies');
 
-        $this->assertContains('random_value', $list->body);
+        $this->assertStringContainsString('random_value', $list->body);
     }
 
     public function test_get_download_links()

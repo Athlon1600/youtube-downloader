@@ -7,14 +7,14 @@ use YouTube\DownloadOptions;
 
 class SerializationUtils
 {
-    public static function optionsToArray(DownloadOptions $downloadOptions)
+    public static function optionsToArray(DownloadOptions $downloadOptions): array
     {
         return array_map(function (StreamFormat $link) {
             return $link->toArray();
         }, $downloadOptions->getAllFormats());
     }
 
-    public static function optionsFromArray($array)
+    public static function optionsFromArray(array $array): DownloadOptions
     {
         $links = array();
 
@@ -25,7 +25,7 @@ class SerializationUtils
         return new DownloadOptions($links);
     }
 
-    public static function optionsFromFile($path)
+    public static function optionsFromFile(string $path): ?DownloadOptions
     {
         $contents = @file_get_contents($path);
 

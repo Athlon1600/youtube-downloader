@@ -6,6 +6,7 @@ use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoNotFoundException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\VideoInfo;
+use YouTube\Models\YouTubeCaption;
 use YouTube\Models\YouTubeConfigData;
 use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
@@ -21,6 +22,7 @@ class YouTubeDownloader
         $this->client = new Browser();
     }
 
+    // Specify network options to be used in all network requests
     public function getBrowser(): Browser
     {
         return $this->client;
@@ -51,8 +53,7 @@ class YouTubeDownloader
     public function getVideoInfo(string $videoId): ?VideoInfo
     {
         $page = $this->getPage($videoId);
-        // TODO
-        return null;
+        return $page->getVideoInfo();
     }
 
     public function getPage(string $url): WatchVideoPage
@@ -142,8 +143,47 @@ class YouTubeDownloader
         $links = SignatureLinkParser::parseLinks($player_response, $player);
 
         // since we already have that information anyways...
-        $info = PlayerVideoInfoMapper::map($player_response);
+        $info = VideoInfoMapper::fromInitialPlayerResponse($page->getPlayerResponse());
 
         return new DownloadOptions($links, $info);
+    }
+
+    /**
+     * @param string $videoId
+     * @return YouTubeCaption[]
+     */
+    public function getCaptions(string $videoId): array
+    {
+        $pageResponse = $this->getPage($videoId);
+        $data = $pageResponse->getPlayerResponse();
+
+        return array_map(function ($item) {
+
+            $temp = new YouTubeCaption();
+            $temp->name = Utils::arrayGet($item, "name.simpleText");
+            $temp->baseUrl = Utils::arrayGet($item, "baseUrl");
+            $temp->languageCode = Utils::arrayGet($item, "languageCode");
+            $vss = Utils::arrayGet($item, "vssId");
+            $temp->isAutomatic = Utils::arrayGet($item, "kind") === "asr" || strpos($vss, "a.") !== false;
+            return $temp;
+
+        }, $data->getCaptionTracks());
+    }
+
+    public function getThumbnails(string $videoId): array
+    {
+        $videoId = Utils::extractVideoId($videoId);
+
+        if ($videoId) {
+            return [
+                'default' => "https://img.youtube.com/vi/{$videoId}/default.jpg",
+                'medium' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
+                'high' => "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg",
+                'standard' => "https://img.youtube.com/vi/{$videoId}/sddefault.jpg",
+                'maxres' => "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg",
+            ];
+        }
+
+        return [];
     }
 }

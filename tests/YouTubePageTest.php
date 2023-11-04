@@ -28,8 +28,6 @@ class YouTubePageTest extends TestCase
             $this->assertNotEmpty($info->title);
             $this->assertNotEmpty($info->channelTitle);
             $this->assertNotEmpty($info->description);
-
-            $this->assertNotEmpty($info->pageUrl);
             $this->assertNotEmpty($info->uploadDate);
             $this->assertNotEmpty($info->thumbnail);
         }

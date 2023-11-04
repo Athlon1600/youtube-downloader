@@ -9,10 +9,10 @@ abstract class HttpResponse
     /**
      * @var Response
      */
-    private $response;
+    private Response $response;
 
     // Will become null if response contents cannot be decoded from JSON
-    private $json;
+    private ?array $json;
 
     public function __construct(Response $response)
     {
@@ -20,7 +20,7 @@ abstract class HttpResponse
         $this->json = json_decode($response->body, true);
     }
 
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->response;
     }
@@ -28,7 +28,7 @@ abstract class HttpResponse
     /**
      * @return string|null
      */
-    public function getResponseBody()
+    public function getResponseBody(): ?string
     {
         return $this->response->body;
     }
@@ -36,12 +36,12 @@ abstract class HttpResponse
     /**
      * @return array|null
      */
-    public function getJson()
+    public function getJson(): ?array
     {
         return $this->json;
     }
 
-    public function isStatusOkay()
+    public function isStatusOkay(): bool
     {
         return $this->getResponse()->status == 200;
     }

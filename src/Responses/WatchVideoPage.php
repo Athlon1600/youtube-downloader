@@ -5,10 +5,12 @@ namespace YouTube\Responses;
 use YouTube\Models\InitialPlayerResponse;
 use YouTube\Models\VideoInfo;
 use YouTube\Models\YouTubeConfigData;
+use YouTube\VideoInfoMapper;
 use YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
 {
+    const REGEX_YTCFG = '/ytcfg\.set\s*\(\s*({.+?})\s*\)\s*;/';
     const REGEX_INITIAL_PLAYER_RESPONSE = '/<script.*?var ytInitialPlayerResponse = (.*?});/';
     const REGEX_INITIAL_DATA = '/<script.*?var ytInitialData = (.*?);<\/script>/';
 
@@ -60,7 +62,7 @@ class WatchVideoPage extends HttpResponse
 
     public function getYouTubeConfigData(): ?YouTubeConfigData
     {
-        if (preg_match('/ytcfg.set\(({.*?})\)/', $this->getResponseBody(), $matches)) {
+        if (preg_match(self::REGEX_YTCFG, $this->getResponseBody(), $matches)) {
             $data = json_decode($matches[1], true);
             return new YouTubeConfigData($data);
         }
@@ -80,6 +82,7 @@ class WatchVideoPage extends HttpResponse
     }
 
     /**
+     * Parse whatever info we can just from this page without making any additional requests
      * @return VideoInfo
      */
     public function getVideoInfo(): ?VideoInfo
@@ -87,37 +90,9 @@ class WatchVideoPage extends HttpResponse
         $playerResponse = $this->getPlayerResponse();
 
         if ($playerResponse) {
-            $playerResponse = $playerResponse->all();
+            return VideoInfoMapper::fromInitialPlayerResponse($playerResponse);
         }
 
-        $thumbnails = Utils::arrayGet($playerResponse, 'videoDetails.thumbnail.thumbnails', []);
-
-        $thumbnail_url = null;
-        $thumb_max_width = 0;
-
-        foreach ($thumbnails as $thumbnail) {
-
-            if ($thumbnail['width'] > $thumb_max_width) {
-                $thumbnail_url = $thumbnail['url'];
-                $thumb_max_width = $thumbnail['width'];
-            }
-        }
-
-        $data = array(
-            'id' => Utils::arrayGet($playerResponse, 'videoDetails.videoId'),
-            'channelId' => Utils::arrayGet($playerResponse, 'videoDetails.channelId'),
-            'channelTitle' => Utils::arrayGet($playerResponse, 'videoDetails.author'),
-            'title' => Utils::arrayGet($playerResponse, 'videoDetails.title'),
-            'description' => Utils::arrayGet($playerResponse, 'videoDetails.shortDescription'),
-            'pageUrl' => $this->getResponse()->info->url,
-            'uploadDate' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.uploadDate'),
-            'viewCount' => Utils::arrayGet($playerResponse, 'videoDetails.viewCount'),
-            'thumbnail' => $thumbnail_url,
-            'duration' => Utils::arrayGet($playerResponse, 'videoDetails.lengthSeconds'),
-            'keywords' => Utils::arrayGet($playerResponse, 'videoDetails.keywords', []),
-            'regionsAllowed' => Utils::arrayGet($playerResponse, 'microformat.playerMicroformatRenderer.availableCountries', [])
-        );
-
-        return new VideoInfo($data);
+        return null;
     }
 }

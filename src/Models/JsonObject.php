@@ -33,6 +33,6 @@ abstract class JsonObject
 
     public function toArray(): array
     {
-        return get_object_vars($this);
+        return $this->_data;
     }
 }
