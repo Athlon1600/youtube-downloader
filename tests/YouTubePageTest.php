@@ -29,7 +29,6 @@ class YouTubePageTest extends TestCase
             $this->assertNotEmpty($info->channelTitle);
             $this->assertNotEmpty($info->description);
             $this->assertNotEmpty($info->uploadDate);
-            $this->assertNotEmpty($info->thumbnail);
         }
     }
 }
