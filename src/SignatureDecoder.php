@@ -2,22 +2,45 @@
 
 namespace YouTube;
 
+/*
+ *
+ * Go into YouTube's player.js, find a code that looks like this:
+ *
+ * ZKa = function(a) {
+    a = a.split("");
+    YKa.uB(a, 2);
+    YKa.Us(a, 43);
+    YKa.fY(a, 50);
+    return a.join("")
+};
+
+and translate it to PHP
+ *
+ */
+
 class SignatureDecoder
 {
     /**
-     * Throws both \Exception and \Error
-     * https://www.php.net/manual/en/language.errors.php7.php
-     *
-     * @param $signature
-     * @param $js_code
-     * @return string
+     * @param string $signature
+     * @param string $js_code Complete source code for YouTube's player.js
+     * @return string|null
      */
-    public function decode(string $signature, string $js_code): string
+    public function decode(string $signature, string $js_code): ?string
     {
         $func_name = $this->parseFunctionName($js_code);
 
+        if (!$func_name) {
+            //Could not parse signature function name
+            return null;
+        }
+
         // PHP instructions
         $instructions = (array)$this->parseFunctionCode($func_name, $js_code);
+
+        if (count($instructions) === 0) {
+            // Could not parse any signature instructions
+            return null;
+        }
 
         foreach ($instructions as $opt) {
 
@@ -40,14 +63,10 @@ class SignatureDecoder
         return trim($signature);
     }
 
-    public function parseFunctionName(string $js_code) : ?string
+    protected function parseFunctionName(string $js_code): ?string
     {
         if (preg_match('@,\s*encodeURIComponent\((\w{2})@is', $js_code, $matches)) {
-            $func_name = $matches[1];
-            $func_name = preg_quote($func_name);
-
-            return $func_name;
-
+            return preg_quote($matches[1]);
         } else if (preg_match('@(?:\b|[^a-zA-Z0-9$])([a-zA-Z0-9$]{2,3})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)@is', $js_code, $matches)) {
             return preg_quote($matches[1]);
         }
@@ -56,7 +75,7 @@ class SignatureDecoder
     }
 
     // convert JS code for signature decipher to PHP code
-    public function parseFunctionCode(string $func_name, string $player_html): ?array
+    protected function parseFunctionCode(string $func_name, string $player_html): ?array
     {
         // extract code block from that function
         // single quote in case function name contains $dollar sign
