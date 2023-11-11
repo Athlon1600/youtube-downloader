@@ -1,14 +1,14 @@
 name: build
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['7.4', '8.0', '8.1', '8.2']
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '7.4', '8.0', '8.1', '8.2' ]
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
@@ -28,4 +28,7 @@ jobs:
       - name: Static analysis
         run: |
           composer require --dev phpstan/phpstan
-          vendor/bin/phpstan analyse -l 4 src tests
+          vendor/bin/phpstan analyse -l 6 src tests
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --verbose --colors=always tests

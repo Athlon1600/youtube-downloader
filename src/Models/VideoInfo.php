@@ -8,7 +8,7 @@ namespace YouTube\Models;
 class VideoInfo
 {
     // uniquely identifies this video
-    public ?string $id;
+    public ?string $id = null;
 
     public ?string $channelId = null;
     public ?string $channelTitle = null;
@@ -19,13 +19,13 @@ class VideoInfo
 
     public ?string $category;
 
-    public ?int $viewCount;
-    public ?int $commentCount;
-    public ?int $likeCount;
-    public ?int $dislikeCount;
+    public ?int $viewCount = null;
+    public ?int $commentCount = null;
+    public ?int $likeCount = null;
+    public ?int $dislikeCount = null;
 
     // in seconds
-    public ?int $durationSeconds;
+    public ?int $durationSeconds = null;
 
     // tags?
     public array $keywords = [];

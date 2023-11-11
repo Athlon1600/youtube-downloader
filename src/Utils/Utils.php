@@ -52,7 +52,7 @@ class Utils
      * @param mixed $default
      * @return mixed|null
      */
-    public static function arrayGet($array, string $key, $default = null)
+    public static function arrayGet(array $array, string $key, $default = null)
     {
         foreach (explode('.', $key) as $segment) {
 
