@@ -2,8 +2,6 @@
 
 namespace YouTube\Models;
 
-use YouTube\Utils\Utils;
-
 /**
  * Class InitialPlayerResponse
  * JSON data that appears inside /watch?v= page [ytInitialPlayerResponse=]
@@ -11,12 +9,22 @@ use YouTube\Utils\Utils;
  */
 class InitialPlayerResponse extends JsonObject
 {
-    //public array $videoDetails;
-    //public array $microformat;
+    public ?array $responseContext = null;
+    public ?array $playabilityStatus = null;
+    public ?array $videoDetails = null;
 
     public function isPlayabilityStatusOkay(): bool
     {
         return $this->deepGet('playabilityStatus.status') == 'OK';
+    }
+
+    /**
+     * If video is not playable, "reason" will include human-readable explanation
+     * @return string|null
+     */
+    public function getPlayabilityStatusReason(): ?string
+    {
+        return $this->deepGet('playabilityStatus.reason');
     }
 
     public function getVideoDetails(): ?array

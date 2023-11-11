@@ -20,6 +20,7 @@ class PlayerApiResponse extends HttpResponse
 
     public function getAllFormats(): array
     {
+        // where both video and audio tracks are combined
         $formats = $this->query('streamingData.formats');
 
         // video only or audio only streams

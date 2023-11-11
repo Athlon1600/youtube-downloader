@@ -6,6 +6,7 @@ class StreamFormat extends JsonObject
 {
     public ?int $itag = null;
     public ?string $mimeType = null;
+    public ?string $bitrate = null;
     public ?int $width = null;
     public ?int $height = null;
     public ?string $contentLength = null;
