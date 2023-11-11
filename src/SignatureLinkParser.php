@@ -34,8 +34,11 @@ class SignatureLinkParser
 
             $cipherArray = Utils::parseQueryString($cipher);
 
+            // contains ?ip noting which IP can access it, and ?expire containing link expiration timestamp
             $url = Utils::arrayGet($cipherArray, 'url');
             $sp = Utils::arrayGet($cipherArray, 'sp'); // used to be 'sig'
+
+            // needs to be decrypted!
             $signature = Utils::arrayGet($cipherArray, 's');
 
             $streamUrl = new StreamFormat($format);

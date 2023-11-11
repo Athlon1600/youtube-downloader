@@ -72,24 +72,29 @@ class YouTubeDownloader
         return new WatchVideoPage($response);
     }
 
+    // Downloading android player API JSON
     protected function getPlayerApiResponse(string $video_id, YouTubeConfigData $configData): PlayerApiResponse
     {
         // exact params matter, because otherwise "slow" download links will be returned
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
                 "client" => [
-                    "clientName" => "WEB",
-                    "clientVersion" => "2.20210721.00.00",
-                    "hl" => "en"
+                    "androidSdkVersion" => 30,
+                    "clientName" => "ANDROID",
+                    "clientVersion" => "17.31.35",
+                    "hl" => "en",
+                    "timeZone" => "UTC",
+                    "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
+                    "utcOffsetMinutes" => 0
                 ]
             ],
+            "params" => "CgIQBg==",
             "videoId" => $video_id,
             "playbackContext" => [
                 "contentPlaybackContext" => [
                     "html5Preference" => "HTML5_PREF_WANTS"
                 ]
             ],
-            "contentCheckOk" => true,
             "racyCheckOk" => true
         ]), [
             'Content-Type' => 'application/json',
@@ -126,6 +131,8 @@ class YouTubeDownloader
             throw new YouTubeException('Page failed to load. HTTP error: ' . $page->getResponse()->error);
         } elseif ($page->isVideoNotFound()) {
             throw new VideoNotFoundException();
+        } elseif ($page->getPlayerResponse()->getPlayabilityStatusReason()) {
+            throw new YouTubeException($page->getPlayerResponse()->getPlayabilityStatusReason());
         }
 
         // a giant JSON object holding useful data
@@ -135,9 +142,9 @@ class YouTubeDownloader
         // query: /youtubei/v1/player for some additional data
         $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
 
-        // get player.js location that holds signature function
+        // get player.js location that holds URL signature decipher function
         $player_url = $page->getPlayerScriptUrl();
-        $response = $this->getBrowser()->cachedGet($player_url);
+        $response = $this->getBrowser()->get($player_url);
         $player = new VideoPlayerJs($response);
 
         $links = SignatureLinkParser::parseLinks($player_response, $player);
