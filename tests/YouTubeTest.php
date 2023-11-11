@@ -8,7 +8,7 @@ use YouTube\YouTubeDownloader;
 
 class YouTubeTest extends TestCase
 {
-    public function test_browser_cookies()
+    public function test_browser_cookies(): void
     {
         $browser = new Browser();
 
@@ -21,7 +21,7 @@ class YouTubeTest extends TestCase
         $this->assertStringContainsString('random_value', $list->body);
     }
 
-    public function test_get_download_links()
+    public function test_get_download_links(): void
     {
         $downloader = new YouTubeDownloader();
 
@@ -30,7 +30,7 @@ class YouTubeTest extends TestCase
         $this->assertGreaterThan(0, count($ret->getAllFormats()));
     }
 
-    public function test_get_download_links_bad_video()
+    public function test_get_download_links_bad_video(): void
     {
         $downloader = new YouTubeDownloader();
 

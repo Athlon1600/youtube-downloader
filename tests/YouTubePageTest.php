@@ -6,7 +6,7 @@ use YouTube\YouTubeDownloader;
 
 class YouTubePageTest extends TestCase
 {
-    public function test_get_video_info()
+    public function test_get_video_info(): void
     {
         $youtube = new YouTubeDownloader();
 
