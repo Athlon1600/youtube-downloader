@@ -32,17 +32,10 @@ We are not responsible for people who attempt to use this program in any way tha
 Recommended way of installing this is via [Composer](http://getcomposer.org):
 
 ```bash
-composer require athlon1600/youtube-downloader "^3.0"
-```
-
-Run locally:
-
-```bash
-php -S localhost:8000 -t public
+composer require athlon1600/youtube-downloader "^4.0"
 ```
 
 ## Example usage
-
 
 ```php
 use YouTube\YouTubeDownloader;
