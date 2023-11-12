@@ -1,13 +1,13 @@
-<center>
-  
-![](https://img.shields.io/packagist/dt/Athlon1600/youtube-downloader.svg) ![](https://img.shields.io/github/last-commit/Athlon1600/youtube-downloader.svg) ![](https://img.shields.io/github/license/Athlon1600/youtube-downloader.svg)
+# YouTube Downloader
 
-</center>
-
-# youtube-downloader
+[![Build Status](https://github.com/ytdl-org/youtube-dl/workflows/CI/badge.svg)](https://github.com/ytdl-org/youtube-dl/actions?query=workflow%3ACI)
+![](https://img.shields.io/github/license/Athlon1600/youtube-downloader.svg)
+![](https://img.shields.io/packagist/dt/Athlon1600/youtube-downloader.svg)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/athlon1600/youtube-downloader)
+![](https://img.shields.io/github/last-commit/Athlon1600/youtube-downloader.svg)
 
 This project was inspired by a very popular youtube-dl python package:  
-https://github.com/rg3/youtube-dl
+https://github.com/ytdl-org/youtube-dl
 
 Yes, there are multiple other PHP-based youtube downloaders on the Internet, 
 but most of them haven't been updated in years, or they depend on youtube-dl itself.  
@@ -16,7 +16,7 @@ Pure PHP-based youtube downloaders that work, and are **kept-up-to date** just d
 
 This script uses no Javascript interpreters, no calls to shell... nothing but pure PHP with no heavy dependencies either.
 
-![](https://i.imgur.com/39LIE0r.png)
+![](https://i.imgur.com/YT39KZ5.png)
 
 That's all there is to it!
 
@@ -27,27 +27,7 @@ Downloading copyrighted material without permission is against [YouTube's terms 
 By using this program, you are solely responsible for any copyright violations. 
 We are not responsible for people who attempt to use this program in any way that breaks YouTube's terms of services.
 
-## Demo App
-
-This may not work at all times, because YouTube puts a short ban on the server if it receives too many requests from it.
-
-- https://youtube-downloader-v3.herokuapp.com/
-
-![](http://proxynova.s3.us-east-1.amazonaws.com/youtube-downloader-save-video.png)
-
-
-### Deploy your own App
-
-on Heroku:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-
-Create a FREE account first if you do not yet have one:  
-https://signup.heroku.com/
-
-Installation
--------
+## Installation
 
 Recommended way of installing this is via [Composer](http://getcomposer.org):
 
@@ -61,12 +41,7 @@ Run locally:
 php -S localhost:8000 -t public
 ```
 
-# Previous versions
-
-Instructions for installing & using Version 2 can be found here:  
-https://github.com/Athlon1600/youtube-downloader/tree/2.x
-
-# Usage
+## Example usage
 
 
 ```php
@@ -132,9 +107,10 @@ For now, there is this:
 
 https://github.com/Athlon1600/youtube-downloader/pull/25#issuecomment-439373506
 
-## Other Links
+## Miscellaneous Links
 
-- https://github.com/Athlon1600/php-curl-file-downloader
+- https://gitlab.futo.org/videostreaming/plugins/youtube
+- https://tyrrrz.me/blog/reverse-engineering-youtube-revisited
 - https://github.com/TeamNewPipe/NewPipeExtractor/blob/d83787a5ca308c4ca4e86e63a8b63c5e7c4708d6/extractor/src/main/java/org/schabi/newpipe/extractor/services/youtube/extractors/YoutubeStreamExtractor.java
 - https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/extractor/youtube.py
 - https://github.com/yt-dlp/yt-dlp
