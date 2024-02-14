@@ -5,9 +5,9 @@ namespace YouTube;
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoNotFoundException;
 use YouTube\Exception\YouTubeException;
-use YouTube\Models\VideoDetails;
+use YouTube\Models\VideoInfo;
+use YouTube\Models\YouTubeCaption;
 use YouTube\Models\YouTubeConfigData;
-use YouTube\Responses\GetVideoInfo;
 use YouTube\Responses\PlayerApiResponse;
 use YouTube\Responses\VideoPlayerJs;
 use YouTube\Responses\WatchVideoPage;
@@ -15,7 +15,7 @@ use YouTube\Utils\Utils;
 
 class YouTubeDownloader
 {
-    protected $client;
+    protected Browser $client;
 
     /** @var YoutubeClientHeaders */
     protected $youtubeClientHeaders;
@@ -26,7 +26,8 @@ class YouTubeDownloader
         $this->youtubeClientHeaders = new YoutubeClientHeaders();
     }
 
-    public function getBrowser()
+    // Specify network options to be used in all network requests
+    public function getBrowser(): Browser
     {
         return $this->client;
     }
@@ -37,14 +38,18 @@ class YouTubeDownloader
     }
 
     /**
-     * @param $query
+     * @param string $query
      * @return array
      */
-    public function getSearchSuggestions($query)
+    public function getSearchSuggestions(string $query): array
     {
         $query = rawurlencode($query);
 
-        $response = $this->client->get('http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=' . $query);
+        $response = $this->client->get('http://suggestqueries.google.com/complete/search', [
+            'client' => 'firefox',
+            'ds' => 'yt',
+            'q' => $query
+        ]);
         $json = json_decode($response->body, true);
 
         if (is_array($json) && count($json) >= 2) {
@@ -54,24 +59,13 @@ class YouTubeDownloader
         return [];
     }
 
-    // No longer working...
-    public function getVideoInfo($video_id)
+    public function getVideoInfo(string $videoId): ?VideoInfo
     {
-        $video_id = Utils::extractVideoId($video_id);
-
-        $response = $this->client->get("https://www.youtube.com/get_video_info?" . http_build_query([
-                'html5' => 1,
-                'video_id' => $video_id,
-                'eurl' => 'https://youtube.googleapis.com/v/' . $video_id,
-                'el' => 'embedded', // or detailpage. default: embedded, will fail if video is not embeddable
-                'c' => 'TVHTML5',
-                'cver' => '6.20180913'
-            ]));
-
-        return new GetVideoInfo($response);
+        $page = $this->getPage($videoId);
+        return $page->getVideoInfo();
     }
 
-    public function getPage($url)
+    public function getPage(string $url): WatchVideoPage
     {
         $video_id = Utils::extractVideoId($url);
 
@@ -87,40 +81,29 @@ class YouTubeDownloader
         return new WatchVideoPage($response);
     }
 
-    /**
-     * To parse the links for the video we need two things:
-     * contents of `player_response` JSON object that appears on video pages
-     * contents of player.js script file that's included inside video pages
-     *
-     * @param array $player_response
-     * @param VideoPlayerJs $player
-     * @return array
-     */
-    public function parseLinksFromPlayerResponse($player_response, VideoPlayerJs $player)
+    // Downloading android player API JSON
+    protected function getPlayerApiResponse(string $video_id, YouTubeConfigData $configData): PlayerApiResponse
     {
-        return [];
-    }
-
-    protected function getPlayerApiResponse($video_id, YouTubeConfigData $configData)
-    {
-        // $api_key = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
-
         // exact params matter, because otherwise "slow" download links will be returned
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
                 "client" => [
                     "clientName" => $this->youtubeClientHeaders->getClientName(),
                     "clientVersion" => $this->youtubeClientHeaders->getClientVersion(),
-                    "hl" => "en"
+                    "androidSdkVersion" => 30,
+                    "hl" => "en",
+                    "timeZone" => "UTC",
+                    "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
+                    "utcOffsetMinutes" => 0
                 ]
             ],
+            "params" => "CgIQBg==",
             "videoId" => $video_id,
             "playbackContext" => [
                 "contentPlaybackContext" => [
                     "html5Preference" => "HTML5_PREF_WANTS"
                 ]
             ],
-            "contentCheckOk" => true,
             "racyCheckOk" => true
         ]), [
             'Content-Type' => 'application/json',
@@ -133,17 +116,23 @@ class YouTubeDownloader
     }
 
     /**
-     * @param $video_id
-     * @param array $options
+     *
+     * @param string $video_id
+     * @param array $extra
      * @return DownloadOptions
      * @throws TooManyRequestsException
+     * @throws VideoNotFoundException
      * @throws YouTubeException
      */
-    public function getDownloadLinks($video_id, $options = array())
+    public function getDownloadLinks(string $video_id, array $extra = []): DownloadOptions
     {
-        $page = $this->getPage($video_id);
-
         $video_id = Utils::extractVideoId($video_id);
+
+        if (!$video_id) {
+            throw new \InvalidArgumentException("Invalid Video ID: " . $video_id);
+        }
+
+        $page = $this->getPage($video_id);
 
         if ($page->isTooManyRequests()) {
             throw new TooManyRequestsException($page);
@@ -151,26 +140,66 @@ class YouTubeDownloader
             throw new YouTubeException('Page failed to load. HTTP error: ' . $page->getResponse()->error);
         } elseif ($page->isVideoNotFound()) {
             throw new VideoNotFoundException();
+        } elseif ($page->getPlayerResponse()->getPlayabilityStatusReason()) {
+            throw new YouTubeException($page->getPlayerResponse()->getPlayabilityStatusReason());
         }
 
+        // a giant JSON object holding useful data
         $youtube_config_data = $page->getYouTubeConfigData();
 
         // the most reliable way of fetching all download links no matter what
+        // query: /youtubei/v1/player for some additional data
         $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
 
-        // get player.js location that holds signature function
+        // get player.js location that holds URL signature decipher function
         $player_url = $page->getPlayerScriptUrl();
-        $response = $this->getBrowser()->cachedGet($player_url);
+        $response = $this->getBrowser()->get($player_url);
         $player = new VideoPlayerJs($response);
 
-        $parser = PlayerResponseParser::createFrom($player_response);
-        $parser->setPlayerJsResponse($player);
-
-        $links = $parser->parseLinks();
+        $links = SignatureLinkParser::parseLinks($player_response, $player);
 
         // since we already have that information anyways...
-        $info = VideoDetails::fromPlayerResponseArray($player_response->getJson());
+        $info = VideoInfoMapper::fromInitialPlayerResponse($page->getPlayerResponse());
 
         return new DownloadOptions($links, $info);
+    }
+
+    /**
+     * @param string $videoId
+     * @return YouTubeCaption[]
+     */
+    public function getCaptions(string $videoId): array
+    {
+        $pageResponse = $this->getPage($videoId);
+        $data = $pageResponse->getPlayerResponse();
+
+        return array_map(function ($item) {
+
+            $temp = new YouTubeCaption();
+            $temp->name = Utils::arrayGet($item, "name.simpleText");
+            $temp->baseUrl = Utils::arrayGet($item, "baseUrl");
+            $temp->languageCode = Utils::arrayGet($item, "languageCode");
+            $vss = Utils::arrayGet($item, "vssId");
+            $temp->isAutomatic = Utils::arrayGet($item, "kind") === "asr" || strpos($vss, "a.") !== false;
+            return $temp;
+
+        }, $data->getCaptionTracks());
+    }
+
+    public function getThumbnails(string $videoId): array
+    {
+        $videoId = Utils::extractVideoId($videoId);
+
+        if ($videoId) {
+            return [
+                'default' => "https://img.youtube.com/vi/{$videoId}/default.jpg",
+                'medium' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg",
+                'high' => "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg",
+                'standard' => "https://img.youtube.com/vi/{$videoId}/sddefault.jpg",
+                'maxres' => "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg",
+            ];
+        }
+
+        return [];
     }
 }

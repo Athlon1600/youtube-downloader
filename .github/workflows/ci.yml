@@ -1,0 +1,34 @@
+name: build
+
+on: [ push, pull_request ]
+
+jobs:
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '7.4', '8.0', '8.1', '8.2' ]
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: curl, json
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Static analysis
+        run: |
+          composer require --dev phpstan/phpstan
+          vendor/bin/phpstan analyse -l 6 src tests
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --verbose --colors=always tests

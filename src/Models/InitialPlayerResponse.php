@@ -2,39 +2,38 @@
 
 namespace YouTube\Models;
 
-use YouTube\Utils\Utils;
-
 /**
  * Class InitialPlayerResponse
  * JSON data that appears inside /watch?v= page [ytInitialPlayerResponse=]
  * @package YouTube\Models
  */
-class InitialPlayerResponse
+class InitialPlayerResponse extends JsonObject
 {
-    private $ytInitialPlayerResponse;
+    public ?array $responseContext = null;
+    public ?array $playabilityStatus = null;
+    public ?array $videoDetails = null;
 
-    public function __construct($ytInitialPlayerResponse)
+    public function isPlayabilityStatusOkay(): bool
     {
-        $this->ytInitialPlayerResponse = $ytInitialPlayerResponse;
+        return $this->deepGet('playabilityStatus.status') == 'OK';
     }
 
-    public function all()
+    /**
+     * If video is not playable, "reason" will include human-readable explanation
+     * @return string|null
+     */
+    public function getPlayabilityStatusReason(): ?string
     {
-        return $this->ytInitialPlayerResponse;
+        return $this->deepGet('playabilityStatus.reason');
     }
 
-    protected function query($key)
+    public function getVideoDetails(): ?array
     {
-        return Utils::arrayGet($this->ytInitialPlayerResponse, $key);
+        return $this->deepGet('videoDetails');
     }
 
-    public function isPlayabilityStatusOkay()
+    public function getCaptionTracks(): array
     {
-        return $this->query('playabilityStatus.status') == 'OK';
-    }
-
-    public function getVideoDetails()
-    {
-        return $this->query('videoDetails');
+        return (array)$this->deepGet("captions.playerCaptionsTracklistRenderer.captionTracks");
     }
 }

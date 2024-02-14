@@ -9,7 +9,7 @@ class YouTubeUrlTest extends TestCase
 {
     const BUNNY_VIDEO_ID = "aqz-KE-bpKQ";
 
-    public function test_id_parsing()
+    public function test_id_parsing(): void
     {
         $file = dirname(dirname(__FILE__)) . '/etc/youtube_urls.txt';
         $contents = file_get_contents($file);
@@ -22,7 +22,7 @@ class YouTubeUrlTest extends TestCase
         }
     }
 
-    public function test_channel_parsing()
+    public function test_channel_parsing(): void
     {
         $tests = [
             'https://www.youtube.com/channel/UCkRfArvrzheW2E7b6SVT7vQ' => 'UCkRfArvrzheW2E7b6SVT7vQ',
@@ -33,8 +33,6 @@ class YouTubeUrlTest extends TestCase
             'https://www.youtube.com/feed/explore' => null,
             '' => null
         ];
-
-        $this->assertNull(Utils::extractChannel(null));
 
         foreach ($tests as $url => $expected) {
             $this->assertEquals($expected, Utils::extractChannel($url));

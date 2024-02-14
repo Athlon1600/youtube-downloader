@@ -8,7 +8,7 @@ use YouTube\Utils\SerializationUtils;
 
 class StreamFormatTest extends TestCase
 {
-    public function test_mime_type_parsing()
+    public function test_mime_type_parsing(): void
     {
         $json = dirname(dirname(__FILE__)) . '/etc/links.json';
 

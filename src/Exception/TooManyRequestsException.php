@@ -6,7 +6,7 @@ use YouTube\Responses\WatchVideoPage;
 
 class TooManyRequestsException extends YouTubeException
 {
-    protected $page;
+    protected WatchVideoPage $page;
 
     public function __construct(WatchVideoPage $page)
     {
@@ -18,7 +18,7 @@ class TooManyRequestsException extends YouTubeException
     /**
      * @return WatchVideoPage
      */
-    public function getPage()
+    public function getPage(): WatchVideoPage
     {
         return $this->page;
     }

@@ -5,14 +5,14 @@ namespace YouTube;
 class YouTubeStreamer
 {
     // 4096
-    protected $buffer_size = 256 * 1024;
+    protected int $buffer_size = 256 * 1024;
 
-    protected $headers = array();
-    protected $headers_sent = false;
+    protected array $headers = array();
+    protected bool $headers_sent = false;
 
-    protected $debug = false;
+    protected bool $debug = false;
 
-    protected function sendHeader($header)
+    protected function sendHeader(string $header): void
     {
         if ($this->debug) {
             var_dump($header);
@@ -21,7 +21,12 @@ class YouTubeStreamer
         }
     }
 
-    public function headerCallback($ch, $data)
+    /**
+     * @param resource $ch
+     * @param string $data
+     * @return int
+     */
+    public function headerCallback($ch, string $data): int
     {
         // this should be first line
         if (preg_match('/HTTP\/[\d.]+\s*(\d+)/', $data, $matches)) {
@@ -48,17 +53,19 @@ class YouTubeStreamer
         return strlen($data);
     }
 
-    public function bodyCallback($ch, $data)
+    /**
+     * @param resource $ch
+     * @param string $data
+     * @return int
+     */
+    public function bodyCallback($ch, string $data): int
     {
-        if (true) {
-            echo $data;
-            flush();
-        }
-
+        echo $data;
+        flush();
         return strlen($data);
     }
 
-    public function stream($url)
+    public function stream(string $url): void
     {
         $ch = curl_init();
 
@@ -104,8 +111,5 @@ class YouTubeStreamer
         $error = ($ret === false) ? sprintf('curl error: %s, num: %s', curl_error($ch), curl_errno($ch)) : null;
 
         curl_close($ch);
-
-        // if we are still here by now, then all must be okay
-        return true;
     }
 }

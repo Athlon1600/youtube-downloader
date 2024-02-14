@@ -6,7 +6,7 @@ use YouTube\YouTubeDownloader;
 
 class YouTubePageTest extends TestCase
 {
-    public function test_get_video_info()
+    public function test_get_video_info(): void
     {
         $youtube = new YouTubeDownloader();
 
@@ -28,10 +28,7 @@ class YouTubePageTest extends TestCase
             $this->assertNotEmpty($info->title);
             $this->assertNotEmpty($info->channelTitle);
             $this->assertNotEmpty($info->description);
-
-            $this->assertNotEmpty($info->pageUrl);
             $this->assertNotEmpty($info->uploadDate);
-            $this->assertNotEmpty($info->thumbnail);
         }
     }
 }

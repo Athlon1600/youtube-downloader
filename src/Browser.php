@@ -3,27 +3,33 @@
 namespace YouTube;
 
 use Curl\BrowserClient;
+use Curl\Response;
 use YouTube\Utils\Utils;
 
 class Browser extends BrowserClient
 {
-    public function setUserAgent($agent)
+    public function setUserAgent(string $agent): void
     {
         $this->headers['User-Agent'] = $agent;
     }
 
-    public function getUserAgent()
+    public function getUserAgent(): ?string
     {
         return Utils::arrayGet($this->headers, 'User-Agent');
     }
 
-    public function followRedirects($enabled)
+    public function followRedirects(bool $enabled): self
     {
         $this->options[CURLOPT_FOLLOWLOCATION] = $enabled ? 1 : 0;
         return $this;
     }
 
-    public function cachedGet($url)
+    /**
+     * Return some special response that lets caller know if cache miss or hit
+     * @param string $url
+     * @return Response
+     */
+    public function cachedGet(string $url): Response
     {
         $cache_path = sprintf('%s/%s', static::getStorageDirectory(), $this->getCacheKey($url));
 
@@ -44,12 +50,12 @@ class Browser extends BrowserClient
         return $response;
     }
 
-    protected function getCacheKey($url)
+    protected function getCacheKey(string $url): string
     {
-        return md5($url) . '_v3';
+        return md5($url) . '_v4';
     }
 
-    public function consentCookies()
+    public function consentCookies(): void
     {
         $response = $this->get('https://www.youtube.com/');
         $current_url = $response->info->url;

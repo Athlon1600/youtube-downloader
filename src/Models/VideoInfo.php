@@ -2,35 +2,34 @@
 
 namespace YouTube\Models;
 
-class VideoInfo extends AbstractModel
+/**
+ * General class for holding video info. Not all fields required
+ */
+class VideoInfo
 {
     // uniquely identifies this video
-    public $id;
+    public ?string $id = null;
 
-    public $channelId;
-    public $channelTitle;
+    public ?string $channelId = null;
+    public ?string $channelTitle = null;
 
-    public $title;
-    public $description;
-    public $uploadDate;
+    public ?string $title = null;
+    public ?string $description = null;
+    public ?\DateTime $uploadDate;
 
-    // accessible by public
-    public $pageUrl;
+    public ?string $category;
 
-    public $viewCount;
-    public $commentCount;
-    public $likeCount;
-    public $dislikeCount;
-
-    // single URL
-    public $thumbnail;
+    public ?int $viewCount = null;
+    public ?int $commentCount = null;
+    public ?int $likeCount = null;
+    public ?int $dislikeCount = null;
 
     // in seconds
-    public $duration;
+    public ?int $durationSeconds = null;
 
     // tags?
-    public $keywords = [];
+    public array $keywords = [];
 
     // If empty, allowed everywhere. ISO 3166 format.
-    public $regionsAllowed = [];
+    public array $regionsAllowed = [];
 }
