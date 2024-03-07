@@ -17,8 +17,7 @@ class YouTubeDownloader
 {
     protected Browser $client;
 
-    /** @var YoutubeClientHeaders */
-    protected $youtubeClientHeaders;
+    protected YoutubeClientHeaders $youtubeClientHeaders;
 
     public function __construct()
     {
@@ -32,7 +31,7 @@ class YouTubeDownloader
         return $this->client;
     }
 
-    public function getYoutubeClientHeaders()
+    public function getYoutubeClientHeaders(): YoutubeClientHeaders
     {
         return $this->youtubeClientHeaders;
     }
