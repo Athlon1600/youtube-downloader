@@ -12,7 +12,7 @@ class YoutubeClientHeaders
         return $this->clientName;
     }
 
-    public function setClientName($clientName): void
+    public function setClientName(string $clientName): void
     {
         $this->clientName = $clientName;
     }
@@ -22,7 +22,7 @@ class YoutubeClientHeaders
         return $this->clientVersion;
     }
 
-    public function setClientVersion($clientVersion): void
+    public function setClientVersion(string $clientVersion): void
     {
         $this->clientVersion = $clientVersion;
     }
