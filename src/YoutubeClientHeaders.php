@@ -5,7 +5,7 @@ namespace YouTube;
 class YoutubeClientHeaders
 {
     protected $clientName = 'ANDROID_EMBEDDED_PLAYER';
-    protected $clientVersion = '16.20';
+    protected $clientVersion = '17.31.35';
 
     public function getClientName()
     {

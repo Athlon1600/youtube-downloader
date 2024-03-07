@@ -88,9 +88,9 @@ class YouTubeDownloader
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
                 "client" => [
+                    "androidSdkVersion" => 30,
                     "clientName" => $this->youtubeClientHeaders->getClientName(),
                     "clientVersion" => $this->youtubeClientHeaders->getClientVersion(),
-                    "androidSdkVersion" => 30,
                     "hl" => "en",
                     "timeZone" => "UTC",
                     "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
