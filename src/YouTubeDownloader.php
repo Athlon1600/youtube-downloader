@@ -81,10 +81,10 @@ class YouTubeDownloader
                 "client" => [
                     "androidSdkVersion" => 30,
                     "clientName" => "ANDROID",
-                    "clientVersion" => "17.31.35",
+                    "clientVersion" => "18.11.34",
                     "hl" => "en",
                     "timeZone" => "UTC",
-                    "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
+                    "userAgent" => "com.google.android.youtube/18.11.34 (Linux; U; Android 11) gzip",
                     "utcOffsetMinutes" => 0
                 ]
             ],
