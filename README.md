@@ -32,7 +32,7 @@ We are not responsible for people who attempt to use this program in any way tha
 Recommended way of installing this is via [Composer](http://getcomposer.org):
 
 ```bash
-composer require Sorshion/youtube-downloader "^1.0"
+composer require sorshion/youtube-downloader "^1.0"
 ```
 
 ## Example usage
