@@ -144,7 +144,7 @@ class YouTubeDownloader
         $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
 
         if (!$player_response->isStatusOkay()) {
-            throw new VideoPlayerApiException('Get Player Api Error: ' . $player_response->getResponse()->error);
+            throw new VideoPlayerApiException('Get Player Api Error: ' . $player_response->getResponse()->body);
         }
 
         // get player.js location that holds URL signature decipher function
