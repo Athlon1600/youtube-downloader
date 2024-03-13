@@ -1,10 +1,10 @@
 # YouTube Downloader
 
 [![Build Status](https://github.com/ytdl-org/youtube-dl/workflows/CI/badge.svg)](https://github.com/ytdl-org/youtube-dl/actions?query=workflow%3ACI)
-![](https://img.shields.io/github/license/Athlon1600/youtube-downloader.svg)
-![](https://img.shields.io/packagist/dt/Athlon1600/youtube-downloader.svg)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/athlon1600/youtube-downloader)
-![](https://img.shields.io/github/last-commit/Athlon1600/youtube-downloader.svg)
+![](https://img.shields.io/github/license/Sorshion/youtube-downloader.svg)
+![](https://img.shields.io/packagist/dt/Sorshion/youtube-downloader.svg)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/Sorshion/youtube-downloader)
+![](https://img.shields.io/github/last-commit/Sorshion/youtube-downloader.svg)
 
 This project was inspired by a very popular youtube-dl python package:  
 https://github.com/ytdl-org/youtube-dl
@@ -32,14 +32,14 @@ We are not responsible for people who attempt to use this program in any way tha
 Recommended way of installing this is via [Composer](http://getcomposer.org):
 
 ```bash
-composer require athlon1600/youtube-downloader "^4.0"
+composer require Sorshion/youtube-downloader "^1.0"
 ```
 
 ## Example usage
 
 ```php
-use YouTube\YouTubeDownloader;
-use YouTube\Exception\YouTubeException;
+use Sorshion\YouTube\YouTubeDownloader;
+use Sorshion\YouTube\Exception\YouTubeException;
 
 $youtube = new YouTubeDownloader();
 
