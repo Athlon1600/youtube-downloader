@@ -17,15 +17,23 @@ class YouTubeDownloader
 {
     protected Browser $client;
 
-    function __construct()
+    protected YoutubeClientHeaders $youtubeClientHeaders;
+
+    public function __construct()
     {
         $this->client = new Browser();
+        $this->youtubeClientHeaders = new YoutubeClientHeaders();
     }
 
     // Specify network options to be used in all network requests
     public function getBrowser(): Browser
     {
         return $this->client;
+    }
+
+    public function getYoutubeClientHeaders(): YoutubeClientHeaders
+    {
+        return $this->youtubeClientHeaders;
     }
 
     /**
@@ -78,15 +86,7 @@ class YouTubeDownloader
         // exact params matter, because otherwise "slow" download links will be returned
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
-                "client" => [
-                    "androidSdkVersion" => 30,
-                    "clientName" => "ANDROID",
-                    "clientVersion" => "17.31.35",
-                    "hl" => "en",
-                    "timeZone" => "UTC",
-                    "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
-                    "utcOffsetMinutes" => 0
-                ]
+                "client" => $this->youtubeClientHeaders->getClient(),
             ],
             "params" => "CgIQBg==",
             "videoId" => $video_id,
