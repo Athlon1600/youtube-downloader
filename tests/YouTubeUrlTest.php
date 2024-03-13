@@ -1,9 +1,9 @@
 <?php
 
-namespace YouTube\Tests;
+namespace Sorshion\YouTube\Tests;
 
 use PHPUnit\Framework\TestCase;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Utils\Utils;
 
 class YouTubeUrlTest extends TestCase
 {

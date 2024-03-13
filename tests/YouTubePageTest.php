@@ -1,8 +1,8 @@
 <?php
 
-namespace YouTube\Tests;
+namespace Sorshion\YouTube\Tests;
 
-use YouTube\YouTubeDownloader;
+use Sorshion\YouTube\YouTubeDownloader;
 
 class YouTubePageTest extends TestCase
 {

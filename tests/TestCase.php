@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Tests;
+namespace Sorshion\YouTube\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 

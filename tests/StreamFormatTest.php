@@ -1,10 +1,10 @@
 <?php
 
-namespace YouTube\Tests;
+namespace Sorshion\YouTube\Tests;
 
 use PHPUnit\Framework\TestCase;
-use YouTube\DownloadOptions;
-use YouTube\Utils\SerializationUtils;
+use Sorshion\YouTube\DownloadOptions;
+use Sorshion\YouTube\Utils\SerializationUtils;
 
 class StreamFormatTest extends TestCase
 {

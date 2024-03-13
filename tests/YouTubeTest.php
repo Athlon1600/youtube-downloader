@@ -1,10 +1,10 @@
 <?php
 
-namespace YouTube\Tests;
+namespace Sorshion\YouTube\Tests;
 
-use YouTube\Browser;
-use YouTube\Exception\YouTubeException;
-use YouTube\YouTubeDownloader;
+use Sorshion\YouTube\Browser;
+use Sorshion\YouTube\Exception\YouTubeException;
+use Sorshion\YouTube\YouTubeDownloader;
 
 class YouTubeTest extends TestCase
 {
