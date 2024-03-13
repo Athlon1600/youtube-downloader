@@ -4,6 +4,7 @@ namespace YouTube;
 
 use YouTube\Exception\TooManyRequestsException;
 use YouTube\Exception\VideoNotFoundException;
+use YouTube\Exception\VideoPlayerApiException;
 use YouTube\Exception\YouTubeException;
 use YouTube\Models\VideoInfo;
 use YouTube\Models\YouTubeCaption;
@@ -130,7 +131,7 @@ class YouTubeDownloader
         } elseif (!$page->isStatusOkay()) {
             throw new YouTubeException('Page failed to load. HTTP error: ' . $page->getResponse()->error);
         } elseif ($page->isVideoNotFound()) {
-            throw new VideoNotFoundException();
+            throw new VideoNotFoundException('Video Not Found!');
         } elseif ($page->getPlayerResponse()->getPlayabilityStatusReason()) {
             throw new YouTubeException($page->getPlayerResponse()->getPlayabilityStatusReason());
         }
@@ -141,6 +142,10 @@ class YouTubeDownloader
         // the most reliable way of fetching all download links no matter what
         // query: /youtubei/v1/player for some additional data
         $player_response = $this->getPlayerApiResponse($video_id, $youtube_config_data);
+
+        if (!$player_response->isStatusOkay()) {
+            throw new VideoPlayerApiException('Get Player Api Error: ' . $player_response->getResponse()->error);
+        }
 
         // get player.js location that holds URL signature decipher function
         $player_url = $page->getPlayerScriptUrl();
