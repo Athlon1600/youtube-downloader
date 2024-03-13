@@ -32,7 +32,7 @@ We are not responsible for people who attempt to use this program in any way tha
 Recommended way of installing this is via [Composer](http://getcomposer.org):
 
 ```bash
-composer require athlon1600/youtube-downloader "^4.0"
+composer require altin7m/youtube-downloader "^4.1"
 ```
 
 ## Example usage
@@ -78,6 +78,16 @@ If you try downloading age-restricted videos, YouTube will ask you to login. The
 $youtube = new YouTubeDownloader();
 $youtube->getBrowser()->setCookieFile('./your_cookies.txt');
 $youtube->getBrowser()->setUserAgent('Opera 7.6');
+```
+
+- Change Youtube Client headers
+
+You can change default Youtube request Client headers.
+
+```php
+$youtube = new YouTubeDownloader();
+$youtube->getYoutubeClientHeaders()->setClientName('ANDROID');
+$youtube->getYoutubeClientHeaders()->setClientVersion('19.10.38');
 ```
 
 See also:  
