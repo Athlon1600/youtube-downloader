@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
 class YouTubeStreamer
 {

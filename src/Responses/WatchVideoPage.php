@@ -1,12 +1,12 @@
 <?php
 
-namespace YouTube\Responses;
+namespace Sorshion\YouTube\Responses;
 
-use YouTube\Models\InitialPlayerResponse;
-use YouTube\Models\VideoInfo;
-use YouTube\Models\YouTubeConfigData;
-use YouTube\VideoInfoMapper;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Models\InitialPlayerResponse;
+use Sorshion\YouTube\Models\VideoInfo;
+use Sorshion\YouTube\Models\YouTubeConfigData;
+use Sorshion\YouTube\VideoInfoMapper;
+use Sorshion\YouTube\Utils\Utils;
 
 class WatchVideoPage extends HttpResponse
 {

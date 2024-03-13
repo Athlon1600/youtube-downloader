@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Utils;
+namespace Sorshion\YouTube\Utils;
 
 class ITagUtils
 {

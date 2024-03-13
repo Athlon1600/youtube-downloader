@@ -1,11 +1,11 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
-use YouTube\Models\StreamFormat;
-use YouTube\Responses\PlayerApiResponse;
-use YouTube\Responses\VideoPlayerJs;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Models\StreamFormat;
+use Sorshion\YouTube\Responses\PlayerApiResponse;
+use Sorshion\YouTube\Responses\VideoPlayerJs;
+use Sorshion\YouTube\Utils\Utils;
 
 class SignatureLinkParser
 {

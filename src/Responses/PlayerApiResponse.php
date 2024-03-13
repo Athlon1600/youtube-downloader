@@ -1,8 +1,8 @@
 <?php
 
-namespace YouTube\Responses;
+namespace Sorshion\YouTube\Responses;
 
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Utils\Utils;
 
 /**
  * Response from: /youtubei/v1/player

@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Models;
+namespace Sorshion\YouTube\Models;
 
 // TODO: CaptionResource extends YouTubeResource
 class YouTubeCaption

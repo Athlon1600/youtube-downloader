@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Exception;
+namespace Sorshion\YouTube\Exception;
 
 class VideoPlayerNotFoundException extends YouTubeException
 {

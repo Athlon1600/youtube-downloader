@@ -1,8 +1,8 @@
 <?php
 
-namespace YouTube\Exception;
+namespace Sorshion\YouTube\Exception;
 
-use YouTube\Responses\WatchVideoPage;
+use Sorshion\YouTube\Responses\WatchVideoPage;
 
 class TooManyRequestsException extends YouTubeException
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Responses;
+namespace Sorshion\YouTube\Responses;
 
 use Curl\Response;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
-use YouTube\Models\StreamFormat;
-use YouTube\Models\VideoInfo;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Models\StreamFormat;
+use Sorshion\YouTube\Models\VideoInfo;
+use Sorshion\YouTube\Utils\Utils;
 
 // TODO: rename DownloaderResponse
 class DownloadOptions

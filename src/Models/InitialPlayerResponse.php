@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Models;
+namespace Sorshion\YouTube\Models;
 
 /**
  * Class InitialPlayerResponse

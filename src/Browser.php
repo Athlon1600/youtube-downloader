@@ -1,10 +1,10 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
 use Curl\BrowserClient;
 use Curl\Response;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Utils\Utils;
 
 class Browser extends BrowserClient
 {

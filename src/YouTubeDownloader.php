@@ -1,18 +1,18 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
-use YouTube\Exception\TooManyRequestsException;
-use YouTube\Exception\VideoNotFoundException;
-use YouTube\Exception\VideoPlayerApiException;
-use YouTube\Exception\YouTubeException;
-use YouTube\Models\VideoInfo;
-use YouTube\Models\YouTubeCaption;
-use YouTube\Models\YouTubeConfigData;
-use YouTube\Responses\PlayerApiResponse;
-use YouTube\Responses\VideoPlayerJs;
-use YouTube\Responses\WatchVideoPage;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Exception\TooManyRequestsException;
+use Sorshion\YouTube\Exception\VideoNotFoundException;
+use Sorshion\YouTube\Exception\VideoPlayerApiException;
+use Sorshion\YouTube\Exception\YouTubeException;
+use Sorshion\YouTube\Models\VideoInfo;
+use Sorshion\YouTube\Models\YouTubeCaption;
+use Sorshion\YouTube\Models\YouTubeConfigData;
+use Sorshion\YouTube\Responses\PlayerApiResponse;
+use Sorshion\YouTube\Responses\VideoPlayerJs;
+use Sorshion\YouTube\Responses\WatchVideoPage;
+use Sorshion\YouTube\Utils\Utils;
 
 class YouTubeDownloader
 {

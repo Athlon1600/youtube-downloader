@@ -1,10 +1,10 @@
 <?php
 
-namespace YouTube;
+namespace Sorshion\YouTube;
 
-use YouTube\Models\InitialPlayerResponse;
-use YouTube\Models\VideoInfo;
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Models\InitialPlayerResponse;
+use Sorshion\YouTube\Models\VideoInfo;
+use Sorshion\YouTube\Utils\Utils;
 
 class VideoInfoMapper
 {

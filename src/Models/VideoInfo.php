@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Models;
+namespace Sorshion\YouTube\Models;
 
 /**
  * General class for holding video info. Not all fields required

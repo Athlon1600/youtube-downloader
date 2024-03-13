@@ -1,8 +1,8 @@
 <?php
 
-namespace YouTube\Models;
+namespace Sorshion\YouTube\Models;
 
-use YouTube\Utils\Utils;
+use Sorshion\YouTube\Utils\Utils;
 
 abstract class JsonObject
 {

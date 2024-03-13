@@ -1,6 +1,6 @@
 <?php
 
-namespace YouTube\Responses;
+namespace Sorshion\YouTube\Responses;
 
 /**
  * Response from: https://s.ytimg.com/yts/jsbin/player-fr_FR-vflHVjlC5/base.js

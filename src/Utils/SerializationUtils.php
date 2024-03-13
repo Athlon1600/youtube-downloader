@@ -1,9 +1,9 @@
 <?php
 
-namespace YouTube\Utils;
+namespace Sorshion\YouTube\Utils;
 
-use YouTube\Models\StreamFormat;
-use YouTube\DownloadOptions;
+use Sorshion\YouTube\Models\StreamFormat;
+use Sorshion\YouTube\DownloadOptions;
 
 class SerializationUtils
 {
