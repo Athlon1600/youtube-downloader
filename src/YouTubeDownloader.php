@@ -86,15 +86,7 @@ class YouTubeDownloader
         // exact params matter, because otherwise "slow" download links will be returned
         $response = $this->client->post("https://www.youtube.com/youtubei/v1/player?key=" . $configData->getApiKey(), json_encode([
             "context" => [
-                "client" => [
-                    "androidSdkVersion" => 30,
-                    "clientName" => $this->youtubeClientHeaders->getClientName(),
-                    "clientVersion" => $this->youtubeClientHeaders->getClientVersion(),
-                    "hl" => "en",
-                    "timeZone" => "UTC",
-                    "userAgent" => "com.google.android.youtube/17.31.35 (Linux; U; Android 11) gzip",
-                    "utcOffsetMinutes" => 0
-                ]
+                "client" => $this->youtubeClientHeaders->getClient(),
             ],
             "params" => "CgIQBg==",
             "videoId" => $video_id,
