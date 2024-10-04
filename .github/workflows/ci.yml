@@ -8,12 +8,12 @@ jobs:
     strategy:
       matrix:
         operating-system: [ ubuntu-latest ]
-        php-versions: [ '7.4', '8.0', '8.1', '8.2' ]
+        php-versions: [ '8.0', '8.1', '8.2', '8.3' ]
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -31,4 +31,4 @@ jobs:
           vendor/bin/phpstan analyse -l 6 src tests
 
       - name: Run PHPUnit
-        run: vendor/bin/phpunit --verbose --colors=always tests
+        run: vendor/bin/phpunit --debug --colors=always tests
