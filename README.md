@@ -3,8 +3,8 @@
 [![Build](https://github.com/Athlon1600/youtube-downloader/actions/workflows/build.yml/badge.svg)](https://github.com/Athlon1600/youtube-downloader/actions/workflows/build.yml)
 [![Run Tests](https://github.com/Athlon1600/youtube-downloader/actions/workflows/tests.yml/badge.svg)](https://github.com/Athlon1600/youtube-downloader/actions/workflows/tests.yml)
 ![](https://img.shields.io/github/license/Athlon1600/youtube-downloader.svg)
+![PHP Versions](https://img.shields.io/badge/PHP%20Versions-%5E7.4%20%7C%7C%20%5E8.0-blue)
 ![](https://img.shields.io/packagist/dt/Athlon1600/youtube-downloader.svg)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/y/athlon1600/youtube-downloader)
 ![](https://img.shields.io/github/last-commit/Athlon1600/youtube-downloader.svg)
 
 This project was inspired by a very popular youtube-dl python package:  
