@@ -1,0 +1,25 @@
+name: Run Tests
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    name: Run tests on PHP version 8.4
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, json
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --verbose --colors=always tests
