@@ -20,7 +20,5 @@ class StreamFormatTest extends TestCase
 
         $first = $utils->getAllFormats()[0];
         $this->assertEquals("video/mp4", $first->getCleanMimeType());
-
-        $this->assertTrue(true);
     }
 }

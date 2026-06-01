@@ -34,11 +34,8 @@ class YouTubeTest extends TestCase
     {
         $downloader = new YouTubeDownloader();
 
-        try {
-            $downloader->getDownloadLinks(self::NOT_FOUND_VIDEO);
-            $this->fail();
-        } catch (YouTubeException $exception) {
-            $this->assertTrue(true);
-        }
+        $this->expectException(YouTubeException::class);
+
+        $downloader->getDownloadLinks(self::NOT_FOUND_VIDEO);
     }
 }
