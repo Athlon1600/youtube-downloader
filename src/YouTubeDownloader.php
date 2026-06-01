@@ -130,7 +130,7 @@ class YouTubeDownloader
         } elseif (!$page->isStatusOkay()) {
             throw new YouTubeException('Page failed to load. HTTP error: ' . $page->getResponse()->error);
         } elseif ($page->isVideoNotFound()) {
-            throw new VideoNotFoundException();
+            throw new VideoNotFoundException('Video Not Found!');
         } elseif ($page->getPlayerResponse()->getPlayabilityStatusReason()) {
             throw new YouTubeException($page->getPlayerResponse()->getPlayabilityStatusReason());
         }
